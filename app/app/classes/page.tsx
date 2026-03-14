@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Tables } from '@/lib/supabase/types';
-import { getAcademicSummary } from '@/lib/academic-profile';
+import { getAcademicStatusLabel } from '@/lib/academic-profile';
 
 type CourseRow = Tables<'courses'>;
 type TutorProfileRow = Tables<'tutor_profiles'>;
@@ -213,6 +213,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
   const unlockedContactTutorProfileIds = new Set<number>(acceptedRequests.map((request) => request.tutor_profile_id));
   const pendingRequestsByTutor = new Map<number, number>();
   const studentCountByTutor = new Map<number, number>();
+  const completedClassCountByTutor = new Map<number, number>();
 
   for (const tutorCourse of tutorCourses) {
     const course = courseById.get(tutorCourse.course_id);
@@ -241,6 +242,11 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
     if (request.status === 'pending') {
       const current = pendingRequestsByTutor.get(request.tutor_profile_id) || 0;
       pendingRequestsByTutor.set(request.tutor_profile_id, current + 1);
+    }
+
+    if (request.status === 'completed') {
+      const currentCompleted = completedClassCountByTutor.get(request.tutor_profile_id) || 0;
+      completedClassCountByTutor.set(request.tutor_profile_id, currentCompleted + 1);
     }
   }
 
@@ -272,10 +278,15 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
         email: user ? userEmailById.get(user.id) || null : null,
         pendingReservations: pendingRequestsByTutor.get(profile.id) || 0,
         studentCount: studentCountByTutor.get(profile.id) || 0,
+        completedClassCount: completedClassCountByTutor.get(profile.id) || 0,
         subjectCount: courses.length,
-        academicSummary: user
-          ? getAcademicSummary(user.specialization, user.is_graduated, user.academic_year)
-          : 'Perfil academico no informado',
+        specializationLabel:
+          user?.specialization && user.specialization.trim().length > 0
+            ? user.specialization
+            : 'Especialidad no informada',
+        academicStatusLabel: user
+          ? getAcademicStatusLabel(user.is_graduated, user.academic_year)
+          : 'Ano no informado',
       };
     })
     .filter((item) => item.courses.length > 0)
@@ -388,7 +399,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {tutors.map(({ profile, courses, displayName, avatarUrl, email, pendingReservations, studentCount, subjectCount, academicSummary }) => {
+            {tutors.map(({ profile, courses, displayName, avatarUrl, email, pendingReservations, studentCount, subjectCount, completedClassCount, specializationLabel, academicStatusLabel }) => {
               const recentComments = (recentCommentedReviewsByTutor.get(profile.id) || []).slice(0, 2);
               const tutorReviews = allReviewsByTutor.get(profile.id) || [];
               const overallRating =
@@ -440,14 +451,22 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
                         <div className="flex items-start justify-between gap-3 border-b border-border/70 pb-2">
                           <div>
                             <CardTitle className="text-4xl leading-none font-bold text-foreground">{displayName}</CardTitle>
-                            <p className="mt-1 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                              <BadgeCheck className="h-3.5 w-3.5 text-primary" />
-                              Profesor verificado por U-clases
-                            </p>
-                            <p className="mt-1 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-                              <GraduationCap className="h-3.5 w-3.5 text-primary" />
-                              {academicSummary}
-                            </p>
+                            <div className="mt-1 space-y-1 text-xs text-muted-foreground">
+                              {completedClassCount > 0 ? (
+                                <p className="flex items-center gap-1.5">
+                                  <BadgeCheck className="h-3.5 w-3.5 text-primary" />
+                                  Profesor verificado por U-clases
+                                </p>
+                              ) : null}
+                              <p className="flex items-center gap-1.5">
+                                <GraduationCap className="h-3.5 w-3.5 text-primary" />
+                                {specializationLabel}
+                              </p>
+                              <p className="flex items-center gap-1.5">
+                                <Clock3 className="h-3.5 w-3.5 text-primary" />
+                                {academicStatusLabel}
+                              </p>
+                            </div>
                           </div>
                           {overallRating ? (
                             <div className="rounded-md border border-foreground/15 bg-foreground px-2.5 py-1 text-right text-background shadow-sm dark:border-background/20 dark:bg-background dark:text-foreground">

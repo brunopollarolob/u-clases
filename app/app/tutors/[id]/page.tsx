@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RequestClassInline } from '@/components/request-class-inline';
 import type { Tables } from '@/lib/supabase/types';
-import { getAcademicSummary } from '@/lib/academic-profile';
+import { getAcademicStatusLabel } from '@/lib/academic-profile';
 
 type CourseRow = Tables<'courses'>;
 type TutorProfileRow = Tables<'tutor_profiles'>;
@@ -118,6 +118,7 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
     { data: tutorCoursesData, error: tutorCoursesError },
     { data: reviewsData, error: reviewsError },
     { data: acceptedRequestData, error: acceptedRequestError },
+    { count: completedClassCount, error: completedClassCountError },
   ] = await Promise.all([
     supabase
       .from('users')
@@ -141,9 +142,14 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
           .limit(1)
           .maybeSingle()
       : Promise.resolve({ data: null as Pick<ClassRequestRow, 'id'> | null, error: null }),
+    supabase
+      .from('class_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('tutor_profile_id', tutorProfile.id)
+      .eq('status', 'completed'),
   ]);
 
-  if (tutorUserError || coursesError || tutorCoursesError || reviewsError || acceptedRequestError) {
+  if (tutorUserError || coursesError || tutorCoursesError || reviewsError || acceptedRequestError || completedClassCountError) {
     throw new Error('No se pudieron cargar los datos del profesor');
   }
 
@@ -183,9 +189,14 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
   const whatsappContact = normalizeWhatsAppLink(tutorProfile.contact_info);
   const contactEmail = normalizeEmail(tutorEmail);
   const canSeeContact = userData.dbUser.role !== 'student' || Boolean(acceptedRequestData);
-  const academicSummary = tutorUser
-    ? getAcademicSummary(tutorUser.specialization, tutorUser.is_graduated, tutorUser.academic_year)
-    : 'Perfil academico no informado';
+  const specializationLabel =
+    tutorUser?.specialization && tutorUser.specialization.trim().length > 0
+      ? tutorUser.specialization
+      : 'Especialidad no informada';
+  const academicStatusLabel = tutorUser
+    ? getAcademicStatusLabel(tutorUser.is_graduated, tutorUser.academic_year)
+    : 'Ano no informado';
+  const isVerifiedTutor = (completedClassCount || 0) > 0;
   const initials = (tutorUser?.full_name || 'U-clases')
     .split(' ')
     .filter(Boolean)
@@ -245,10 +256,22 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
                 </Avatar>
                 <div>
                   <span>{tutorUser?.full_name || 'Profesor/a U-clases'}</span>
-                  <p className="mt-1 inline-flex items-center gap-1.5 text-xs font-normal text-muted-foreground">
-                    <GraduationCap className="h-3.5 w-3.5 text-primary" />
-                    {academicSummary}
-                  </p>
+                  <div className="mt-1 space-y-1 text-xs font-normal text-muted-foreground">
+                    {isVerifiedTutor ? (
+                      <p className="flex items-center gap-1.5">
+                        <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+                        Profesor verificado por U-clases
+                      </p>
+                    ) : null}
+                    <p className="flex items-center gap-1.5">
+                      <GraduationCap className="h-3.5 w-3.5 text-primary" />
+                      {specializationLabel}
+                    </p>
+                    <p className="flex items-center gap-1.5">
+                      <Clock3 className="h-3.5 w-3.5 text-primary" />
+                      {academicStatusLabel}
+                    </p>
+                  </div>
                 </div>
               </CardTitle>
 
