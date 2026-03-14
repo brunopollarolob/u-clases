@@ -1,6 +1,6 @@
-# Contributing to SaaS Template Lite
+# Contributing to u-clases
 
-Thank you for your interest in contributing to SaaS Template Lite! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to u-clases.
 
 ## Code of Conduct
 
@@ -10,130 +10,105 @@ By participating in this project, you agree to:
 - Focus on constructive criticism
 - Respect differing viewpoints and experiences
 
-## How to Contribute
+## Before You Start
 
-Before starting implementation work, review `progress.md` to align with current project status and active implementation priorities.
+Read these files first:
+
+- `README_TECHNICAL.md`
+- `progress.md`
+- `SETUP.md`
+
+These are the source of truth for architecture, current status, and local setup.
+
+## How to Contribute
 
 ### Reporting Issues
 
-1. **Check existing issues** first to avoid duplicates
-2. **Use issue templates** when available
-3. **Provide details**:
-   - Clear description of the problem
-   - Steps to reproduce
-   - Expected vs actual behavior
-   - Environment details (OS, Node version, etc.)
-   - Screenshots if applicable
+1. Check existing issues first.
+2. Use issue templates when available.
+3. Include the following details.
+4. Clear problem description.
+5. Steps to reproduce.
+6. Expected and actual behavior.
+7. Environment details (OS, Node, pnpm, browser).
+8. Screenshots if applicable.
 
 ### Suggesting Features
 
-1. **Open a discussion** first for major features
-2. **Explain the use case** - why is this needed?
-3. **Consider the scope** - does it fit the "minimal" philosophy?
-4. **Propose implementation** if you have ideas
+1. Open a discussion for major features.
+2. Explain the use case and expected value.
+3. Keep proposals aligned with current v1 scope (class management).
+4. Share implementation ideas if possible.
 
 ### Submitting Pull Requests
 
-1. **Fork the repository** and create your branch from `main`
-2. **Follow the setup guide** in [SETUP.md](./SETUP.md)
-3. **Make your changes**:
-   - Write clear, commented code
-   - Follow existing patterns
-   - Update documentation as needed
-4. **Test your changes** thoroughly
-5. **Commit with clear messages**:
-   ```
-   feat: add user profile page
-   fix: correct stripe webhook signature validation
-   docs: update setup instructions for Windows
-   ```
-6. **Open a Pull Request**:
-   - Reference any related issues
-   - Describe what changes you made and why
-   - Include screenshots for UI changes
+1. Fork the repository and branch from `main`.
+2. Follow local setup in `SETUP.md`.
+3. Implement changes using existing patterns.
+4. Update docs when behavior changes.
+5. Test manually before opening the PR.
+6. Use clear commit messages, for example:
+
+```text
+feat: add tutor detail sorting by rating
+fix: prevent duplicate class request submissions
+docs: update setup notes for Supabase CLI
+```
 
 ## Development Guidelines
 
 ### Code Style
 
-- **TypeScript**: Use proper types, avoid `any`
-- **React**: Functional components with hooks
-- **Naming**: 
-  - Components: PascalCase (`UserProfile.tsx`)
-  - Utilities: camelCase (`formatDate.ts`)
-  - Constants: UPPER_SNAKE_CASE (`API_ENDPOINTS`)
-- **Files**: One component per file, co-locate related files
-
-### File Structure
-
-```
-feature/
-├── components/     # React components
-├── lib/           # Business logic
-├── hooks/         # Custom React hooks
-└── types/         # TypeScript types
-```
+- TypeScript with explicit types (avoid `any` unless justified)
+- Functional React components
+- Naming conventions
+- Components: PascalCase (`TutorCard.tsx`)
+- Utilities: camelCase (`formatCurrency.ts`)
+- Constants: UPPER_SNAKE_CASE (`MAX_UPLOAD_MB`)
 
 ### Best Practices
 
-1. **Keep it simple** - This is a minimal template
-2. **Don't over-engineer** - Avoid premature optimization
-3. **Comment your code** - Especially complex logic
-4. **Use existing utilities** - Check `/lib` before writing new ones
-5. **Follow patterns** - Consistency is key
+1. Keep solutions simple and maintainable.
+2. Avoid ad-hoc auth checks; prefer DAL patterns.
+3. Reuse existing utilities in `lib/` and `components/`.
+4. Keep API routes rate-limited unless there is a justified exception.
+5. Keep docs and schema/types in sync with code changes.
 
 ### Database Changes
 
-1. **Create new migration** with `supabase migration new your_change_name`
-2. **Add your changes** to the generated migration file
-3. **Document migrations** clearly with comments
-4. **Update TypeScript types** with `supabase gen types typescript`
-5. **Test with fresh database** using `supabase db reset`
+1. Create a new migration file in `supabase/migrations/`.
+2. Keep SQL focused and reversible when possible.
+3. Apply migrations locally and validate affected flows.
+4. Regenerate types when schema changes:
 
-### Adding Dependencies
+```bash
+pnpm db:types
+```
 
-1. **Justify new dependencies** - Why is it needed?
-2. **Check bundle size** impact
-3. **Prefer lightweight alternatives**
-4. **Update documentation**
+## Testing Checklist
 
-## Testing
+There is no full automated test suite yet. For every PR:
 
-While this free version doesn't include tests, please:
-1. **Manually test** all changes
-2. **Test edge cases**
-3. **Verify mobile responsiveness**
-4. **Check TypeScript compilation**
-5. **Test payment flows** with Stripe test mode
+1. Validate the changed flow end-to-end manually.
+2. Test edge cases and basic mobile behavior.
+3. Run TypeScript checks:
+
+```bash
+pnpm exec tsc --noEmit
+```
+
+4. If you touched requests/reviews flows, verify notification behavior and review gating after class completion.
 
 ## Documentation
 
-Update documentation for:
-- New features or changes
+Update docs when you change:
+
+- Features or UX behavior
+- API contracts
 - Environment variables
 - Setup steps
-- API changes
-- Component props
+- Data model assumptions
 
-## Getting Help
+## License
 
-- **Discord**: [Join our community](#) (if applicable)
-- **Discussions**: Use GitHub Discussions for questions
-- **Issues**: For bugs and feature requests
-
-## Recognition
-
-Contributors will be:
-- Listed in the README
-- Thanked in release notes
-- Given credit in commit messages
-
-## Release Process
-
-1. PRs are reviewed by maintainers
-2. Changes are tested thoroughly
-3. Documentation is updated
-4. Version is bumped following semver
-5. Release notes are published
-
-Thank you for helping make SaaS Template Lite better for everyone! 🚀 
+By contributing, you agree that your contributions are licensed under MIT.
