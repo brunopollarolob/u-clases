@@ -94,7 +94,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
             return {
               name: userById.get(profile.user_id)?.full_name || 'Profesor/a U-clases',
-              course: course ? `${course.id} · ${course.name}` : 'Ramos de Plan Comun',
+              course: course ? `${course.id} · ${course.name}` : 'Ramos de Plan Común',
               rating: averageRating > 0 ? averageRating.toFixed(1) : 'Nuevo',
               reviews: reviewsCount,
               averageRating,
@@ -114,9 +114,9 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
   if (topTutors.length === 0) {
     topTutors = [
-      { name: 'Profe destacado', course: 'MA1002 · Calculo', rating: '5.0', reviews: 1 },
-      { name: 'Profe recomendado', course: 'FI1000 · Fisica Clasica', rating: '4.9', reviews: 1 },
-      { name: 'Profe activo', course: 'MA1102 · Algebra Lineal', rating: '4.8', reviews: 1 },
+      { name: 'Profe destacado', course: 'MA1002 · Cálculo', rating: '5.0', reviews: 1 },
+      { name: 'Profe recomendado', course: 'FI1000 · Física Clásica', rating: '4.9', reviews: 1 },
+      { name: 'Profe activo', course: 'MA1102 · Álgebra Lineal', rating: '4.8', reviews: 1 },
     ];
   }
   
@@ -141,7 +141,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
               Privacidad
             </Link>
             <Link href="/terms" className="hover:text-foreground">
-              Terminos
+              Términos
             </Link>
           </div>
         </div>

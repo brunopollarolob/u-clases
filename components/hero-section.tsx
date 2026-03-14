@@ -88,10 +88,10 @@ export function HeroSection({ user, topTutors = [] }: HeroSectionProps) {
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-lg animate-fade-in delay-200">
-              La plataforma de clases particulares centralizada de la Universidad de Chile para la Facultad de Ciencias Fisicas y Matematicas. Conecta con estudiantes y profesores de Beauchef.
+              La plataforma de clases particulares centralizada de la Universidad de Chile para la Facultad de Ciencias Físicas y Matemáticas. Conecta con estudiantes y profesores de Beauchef.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-scale-in delay-300">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-scale-in delay-400">
               <Button asChild size="lg" className="gradient-bg hover-lift group">
                 <Link href="/app">
                   <Search className="mr-2 h-5 w-5" />
@@ -101,7 +101,7 @@ export function HeroSection({ user, topTutors = [] }: HeroSectionProps) {
               </Button>
               <Button asChild variant="outline" size="lg" className="hover-scale">
                 <Link href="/sign-up">
-                  Registrarme gratis
+                  Regístrate gratis
                 </Link>
               </Button>
             </div>

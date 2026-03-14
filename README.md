@@ -1,26 +1,26 @@
 # u-clases
 
-u-clases conecta estudiantes con tutores universitarios para gestionar clases de punta a punta: descubrimiento de tutores, solicitudes, seguimiento del estado y resenas.
+U-clases conecta estudiantes con tutores universitarios para gestionar clases de punta a punta: descubrimiento de tutores, solicitudes, seguimiento del estado y reseñas.
 
-## Que resuelve
+## Qué resuelve
 
-- Publicacion y gestion de perfiles de tutor
-- Busqueda de tutores por curso y precio maximo
+- Publicación y gestión de perfiles de tutor
+- Búsqueda de tutores por curso y precio máximo
 - Flujo de solicitudes con estados (pendiente, aceptada, completada)
-- Resenas habilitadas solo despues de completar la clase
+- Reseñas habilitadas solo después de completar la clase
 - Notificaciones con estado de visto persistente
 
-## Alcance de la primera version
+## Alcance de la primera versión
 
-La primera salida a produccion prioriza gestion academica:
+La primera salida a producción prioriza la gestión académica:
 
 - Tutores
 - Estudiantes
 - Solicitudes
-- Resenas
+- Reseñas
 - Notificaciones
 
-Pagos no son parte del camino critico de v1.
+Los pagos no son parte del camino crítico de v1.
 
 ## Stack
 
@@ -38,7 +38,7 @@ pnpm dev
 
 Abre `http://localhost:3000`.
 
-## Variables de entorno minimas
+## Variables de entorno mínimas
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=...
@@ -47,18 +47,18 @@ SUPABASE_SERVICE_ROLE_KEY=...
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-## Documentacion
+## Documentación
 
 - Setup detallado: `SETUP.md`
-- Estado de implementacion: `progress.md`
-- Guia tecnica para contributors: `README_TECHNICAL.md`
+- Estado de implementación: `progress.md`
+- Guía técnica para contributors: `README_TECHNICAL.md`
 - Contexto de agentes: `gemini.md`
 - Auth DAL: `lib/auth/README.md`
 - Data layer: `lib/db/README.md`
 
-## Creditos
+## Créditos
 
-Este proyecto partio desde el template `saas-template-for-ai-lite` de Teemu Sormunen.
+Este proyecto partió desde el template `saas-template-for-ai-lite` de Teemu Sormunen.
 
 - Base: [TeemuSo/saas-template-for-ai-lite](https://github.com/TeemuSo/saas-template-for-ai-lite)
 - Desarrollo principal asistido por `antigravity` con `Gemini 3.1 High`

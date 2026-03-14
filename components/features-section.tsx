@@ -35,7 +35,7 @@ const features = [
   },
   {
     title: 'Para Alumnos y Profes',
-    description: 'Dos roles distintos: registrate como Alumno para buscar clases particulares o como Profesor para ofrecer tus clases.',
+    description: 'Dos roles distintos: regístrate como Alumno para buscar clases particulares o como Profesor para ofrecer tus clases.',
     icon: Users,
     gradient: 'from-primary/70 to-primary/40',
     delay: 'delay-400',
@@ -100,6 +100,33 @@ export function FeaturesSection() {
               que Beauchef necesitaba
             </span>
           </h2>
+
+          <div className="mx-auto mb-6 max-w-3xl rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-5 text-left animate-fade-in delay-150 shadow-lg shadow-primary/10">
+            <p className="mb-3 inline-flex items-center rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+              De foro suelto a ranking real
+            </p>
+
+            <h3 className="text-base md:text-lg font-semibold text-foreground mb-3">
+              U-clases existe para ordenar el caos de buscar profe.
+            </h3>
+
+            <p className="text-sm md:text-base text-foreground/90 leading-relaxed mb-4">
+              Actualmente, el principal medio para ofrecer clases particulares es el foro institucional de U-Cursos,
+              una plataforma que no está optimizada para este fin. Así nace U-clases: centralizar a los profes en
+              un solo lugar con un sistema de puntuación robusto.
+            </p>
+
+            <div className="grid gap-2 sm:grid-cols-2 text-xs md:text-sm">
+              <div className="rounded-lg border border-border bg-background/90 px-3 py-2">
+                <p className="font-semibold text-muted-foreground">Antes</p>
+                  <p className="text-foreground/90">Publicaciones dispersas y poca señal de calidad.</p>
+              </div>
+              <div className="rounded-lg border border-primary/25 bg-primary/10 px-3 py-2">
+                <p className="font-semibold text-primary">Ahora en U-clases</p>
+                  <p className="text-foreground/90">Oferta centralizada con reseñas verificadas y decisiones más rápidas.</p>
+              </div>
+            </div>
+          </div>
 
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-fade-in delay-200">
             U-clases centraliza a todos los profesores particulares de la FCFM en una sola plataforma,
