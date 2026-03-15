@@ -1,6 +1,6 @@
 # GEMINI.md
 
-This file provides guidance to Gemini when working with this Next.js 15 SaaS template.
+This file provides guidance to Gemini when working with u-clases.
 
 ## First Step Before Coding
 
@@ -15,6 +15,8 @@ Read `progress.md` first. It is the source of truth for:
 - Stripe is not part of the v1 production path.
 - Future payment integration is planned with Fintoc, in a later phase.
 - Contact privacy rule: student sees tutor contact details only after tutor accepts (or completes) a class request.
+- Student retention/discovery features in scope for v1 now include favorites and ranking/sorting improvements.
+- Tutor course metadata now supports an "auxiliar" flag per published course.
 
 ## Development Commands
 
@@ -96,6 +98,7 @@ This is a Next.js 15 SaaS template using modern **Data Access Layer (DAL)** patt
 - `/app/app/tutor/profile/page.tsx` - Tutor profile and course management (separate from publish)
 - `/app/app/tutors/[id]/page.tsx` - Public-in-app tutor detail page for students
 - `/app/app/requests/page.tsx` - Centralized request lifecycle management
+- `/app/app/favorites/page.tsx` - Student-only saved tutor profiles panel
 
 ### `/lib/` - Core Business Logic
 - `/lib/auth/` - Authentication helpers and Data Access Layer
@@ -216,6 +219,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 - `app/app/tutor/page.tsx` - Tutor publish onboarding and publish status
 - `app/app/tutor/profile/page.tsx` - Tutor profile/course management
 - `app/app/tutors/[id]/page.tsx` - Student-facing tutor detail page
+- `app/app/favorites/page.tsx` - Student-facing saved tutor list
 
 ### Landing Page
 - `app/page.tsx` - Landing page content
@@ -285,3 +289,12 @@ await supabase.from('class_requests').update({ status: 'completed' }).eq('id', r
 - **Testing**: No automated tests configured - relies on manual testing flow
 - **Authentication**: Always prefer DAL functions over direct Supabase client calls
 - **No Server Actions**: This template avoids server actions for simplicity
+
+## Current Snapshot (2026-03-15)
+
+- Branding and product copy are aligned to U-clases across landing, auth surfaces, app header, and browser tab icon/title.
+- Tutor discovery supports sorting modes (`popular`, `rating`, `price`) in `/app/classes`.
+- Student favorites are implemented end-to-end: migration, API, cards/detail toggle, dedicated panel, and avatar-menu entry.
+- Tutor reviews panel (`/app/reviews`) resolves student name fallbacks via auth metadata/email when `users.full_name` is missing.
+- Tutor course publishing supports per-course `is_ta` (`Auxiliar`) selection and student-facing display in class cards and tutor detail.
+- `README.md` is public-facing and `progress.md` is the operational source of truth for implementation state.

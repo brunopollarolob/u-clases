@@ -1,6 +1,6 @@
 # Progress - Agent-Focused
 
-Last update: 2026-03-14
+Last update: 2026-03-15
 
 ## Scope
 Track only implementation status and next actions that help coding agents execute work quickly and safely.
@@ -12,6 +12,7 @@ Track only implementation status and next actions that help coding agents execut
 - Teacher publishing flow is implemented: profile, contact details, hourly rate, and course selection.
 - Student discovery flow is implemented: students can browse active teachers and see published courses.
 - Student filter now focuses on course and max price (text filter removed).
+- Student search supports sorting by popularidad, mejor evaluados, and menor precio.
 - Review flow is now gated by class completion: student requests -> tutor accepts/completes -> student can review.
 - Request lifecycle is centralized in `/app/requests` for each user (single control panel).
 - Teachers get pending-request visibility from dashboard and full handling in the requests panel.
@@ -37,12 +38,16 @@ Track only implementation status and next actions that help coding agents execut
 - Student flow now includes a dedicated tutor detail page (`/app/tutors/[id]`) reachable from class search and requests.
 - Tutor lifecycle is split between publish (`/app/tutor`) and manage (`/app/tutor/profile`) to avoid mixed intent.
 - Landing hero now renders real top tutors by rating/review count (instead of static mock data).
+- Plan Común quick-links from internal dashboard now redirect to `/app/classes` with course filter pre-applied.
 - Browser tab branding now uses U-clases metadata + custom icon (`app/icon.svg`).
 - Auth screens were redesigned to platform style and sign-up now supports a two-step flow.
 - Sign-up now captures personal/contact data at registration (`fullName`, `phone`, `academicYear`, `isGraduated`).
 - Google registration now routes users to profile completion when personal data is missing.
 - Google auth error handling now reports actionable setup guidance when provider is disabled.
 - First deployment scope is class management only (teachers/students/requests/reviews), with no active payment gating.
+- Student favorites are implemented end-to-end with dedicated panel (`/app/favorites`) and avatar-menu access.
+- Tutor review panel now uses robust student identity fallback (DB full name -> auth metadata -> auth email -> id label).
+- Tutor courses now support per-course auxiliar flag (`is_ta`) in publish/manage flow and student-facing views.
 - TypeScript check is green: `pnpm exec tsc --noEmit`.
 
 ## Completed This Session
@@ -79,6 +84,11 @@ Track only implementation status and next actions that help coding agents execut
 31. Added tutor photo upload API (`POST /api/tutor/photo`) with 5 MB limit, file-type validation, and Supabase Storage persistence.
 32. Extended tutor profile forms (`/app/tutor` and `/app/tutor/profile`) with avatar upload UI + preview wired to `users.avatar_url`.
 33. Refined `/app/classes` cards to better match marketplace/mock style while preserving U-clases data and contact-visibility rules.
+34. Added dashboard Plan Común quick-filter links to class search (`/app/classes?course=...`).
+35. Added sorting modes in class search (`popular`, `rating`, `price`) and wired GET filter state.
+36. Added student favorites feature end-to-end (DB, API, UI toggles, dedicated panel, avatar-menu link).
+37. Improved tutor reviews panel to display student identity reliably using auth fallback sources.
+38. Added per-course auxiliar metadata (`tutor_courses.is_ta`) with tutor-form controls and student-side display badges.
 
 ## Active Implementation Plan
 1. Auth reliability hardening
@@ -99,7 +109,7 @@ Tasks:
 3. Student flow iteration (UX/data depth)
 Status: in progress
 Tasks:
-- Improve ranking/ordering (e.g., by relevance or price).
+- Keep tuning ranking quality after new sorting modes (popular/rating/price).
 - Add richer tutor metadata (rating aggregates now visible in cards/detail; continue refining).
 - Add pagination for large request history.
 
@@ -108,6 +118,7 @@ Status: in progress
 Tasks:
 - Validate personal-data update UX after email change confirmation flow.
 - Surface personal fields in class cards where useful (optional privacy controls later).
+- Validate auxiliar flag UX copy/clarity and potential future distinction between "fui" vs "soy" auxiliar.
 
 5. Docs alignment for contributors/agents
 Status: in progress
@@ -136,10 +147,19 @@ Tasks:
 - Confirm contact visibility and filter behavior in localhost.
 - Confirm marketplace-style card layout quality on desktop/mobile and CTA readability.
 - Confirm avatar rendering fallback when tutor has no uploaded photo.
+- Validate sorting behavior for all modes (`popular`, `rating`, `price`) and quick-link prefilter from dashboard.
+- Confirm `Auxiliar` badge appears correctly in both `/app/classes` and `/app/tutors/[id]`.
+- Confirm favorites end-to-end (toggle, panel list, avatar entrypoint).
 
 4. Apply and validate migration for class requests:
 - Run `supabase db push` to create `class_requests` in DB.
 - Re-test flow: request -> accept -> complete -> review.
+Status: done in local validation
+
+9. Apply and validate migration for tutor auxiliar flag:
+- Run `supabase db push` to apply `tutor_courses.is_ta`.
+- Re-test tutor profile save/update with auxiliar selection.
+- Re-test student views to verify auxiliar badge rendering.
 Status: done in local validation
 
 5. Apply and validate migration for personal profile fields:

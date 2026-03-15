@@ -61,8 +61,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 Este proyecto partió desde el template `saas-template-for-ai-lite` de Teemu Sormunen.
 
 - Base: [TeemuSo/saas-template-for-ai-lite](https://github.com/TeemuSo/saas-template-for-ai-lite)
-- Desarrollo principal asistido por `antigravity` con `Gemini 3.1 High`
-- Desarrollo principal asistido por `GitHub Copilot` con `GPT-5.3-Codex`
+- Desarrollo principal asistido con `Antigravity` usando `Gemini 3.1 High`
+- Desarrollo principal asistido con `GitHub Copilot` usando `GPT-5.3-Codex`
 
 ## Licencia
 
