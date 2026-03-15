@@ -6,7 +6,6 @@ import {
   Clock3,
   Filter,
   GraduationCap,
-  Heart,
   Mail,
   MessageCircle,
   MessageSquareQuote,
@@ -19,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FavoriteTutorButton } from '@/components/favorite-tutor-button';
 import type { Tables } from '@/lib/supabase/types';
 import { getAcademicStatusLabel } from '@/lib/academic-profile';
 
@@ -28,6 +28,7 @@ type UserRow = Tables<'users'>;
 type TutorCourseRow = Tables<'tutor_courses'>;
 type ReviewRow = Tables<'reviews'>;
 type ClassRequestRow = Tables<'class_requests'>;
+type FavoriteTutorRow = Tables<'favorite_tutors'>;
 
 interface ClassesPageProps {
   searchParams?: {
@@ -122,6 +123,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
     { data: reviewsData, error: reviewsError },
     { data: acceptedRequestsData, error: acceptedRequestsError },
     { data: tutorRequestStatsData, error: tutorRequestStatsError },
+    { data: favoritesData, error: favoritesError },
   ] =
     await Promise.all([
       userIds.length
@@ -154,6 +156,12 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
             .select('tutor_profile_id, status, student_id')
             .in('tutor_profile_id', profileIds)
         : Promise.resolve({ data: [], error: null }),
+      userData.dbUser.role === 'student' && profileIds.length
+        ? supabase
+            .from('favorite_tutors')
+            .select('tutor_profile_id')
+            .eq('student_id', userData.dbUser.id)
+        : Promise.resolve({ data: [], error: null }),
     ]);
 
   if (usersError) {
@@ -176,6 +184,10 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
     throw new Error('No se pudieron cargar métricas de reservas.');
   }
 
+  if (favoritesError) {
+    throw new Error('No se pudieron cargar los favoritos.');
+  }
+
   const users = (usersData || []) as Pick<
     UserRow,
     'id' | 'full_name' | 'supabase_user_id' | 'avatar_url' | 'academic_year' | 'is_graduated' | 'specialization'
@@ -184,6 +196,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
   const reviews = (reviewsData || []) as Pick<ReviewRow, 'id' | 'tutor_id' | 'course_id' | 'rating' | 'comment' | 'created_at'>[];
   const acceptedRequests = (acceptedRequestsData || []) as Pick<ClassRequestRow, 'tutor_profile_id' | 'status'>[];
   const tutorRequestStats = (tutorRequestStatsData || []) as Pick<ClassRequestRow, 'tutor_profile_id' | 'status' | 'student_id'>[];
+  const favoriteTutorRows = (favoritesData || []) as Pick<FavoriteTutorRow, 'tutor_profile_id'>[];
 
   const courseById = new Map(allCourses.map((course) => [course.id, course]));
   const userById = new Map(users.map((user) => [user.id, user]));
@@ -211,6 +224,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
   const recentCommentedReviewsByTutor = new Map<number, typeof reviews>();
   const allReviewsByTutor = new Map<number, typeof reviews>();
   const unlockedContactTutorProfileIds = new Set<number>(acceptedRequests.map((request) => request.tutor_profile_id));
+  const favoriteTutorProfileIds = new Set<number>(favoriteTutorRows.map((row) => row.tutor_profile_id));
   const pendingRequestsByTutor = new Map<number, number>();
   const studentCountByTutor = new Map<number, number>();
   const completedClassCountByTutor = new Map<number, number>();
@@ -279,6 +293,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
         pendingReservations: pendingRequestsByTutor.get(profile.id) || 0,
         studentCount: studentCountByTutor.get(profile.id) || 0,
         completedClassCount: completedClassCountByTutor.get(profile.id) || 0,
+        isFavorite: favoriteTutorProfileIds.has(profile.id),
         subjectCount: courses.length,
         specializationLabel:
           user?.specialization && user.specialization.trim().length > 0
@@ -399,7 +414,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {tutors.map(({ profile, courses, displayName, avatarUrl, email, pendingReservations, studentCount, subjectCount, completedClassCount, specializationLabel, academicStatusLabel }) => {
+            {tutors.map(({ profile, courses, displayName, avatarUrl, email, pendingReservations, studentCount, subjectCount, completedClassCount, isFavorite, specializationLabel, academicStatusLabel }) => {
               const recentComments = (recentCommentedReviewsByTutor.get(profile.id) || []).slice(0, 2);
               const tutorReviews = allReviewsByTutor.get(profile.id) || [];
               const overallRating =
@@ -427,13 +442,9 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
                         Popular
                         <span className="text-muted-foreground">· {pendingReservations} reservas nuevas</span>
                       </p>
-                      <button
-                        type="button"
-                        aria-label={`Guardar profesor ${displayName}`}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        <Heart className="h-4 w-4" />
-                      </button>
+                      {userData.dbUser.role === 'student' ? (
+                        <FavoriteTutorButton tutorProfileId={profile.id} initialIsFavorite={isFavorite} iconOnly />
+                      ) : null}
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4 p-4 sm:p-5">

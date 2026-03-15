@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { LogOut, Loader2, ClipboardList, UserRoundCog, Star, Trash2, BookOpenCheck } from 'lucide-react';
+import { LogOut, Loader2, ClipboardList, UserRoundCog, Star, Trash2, BookOpenCheck, Heart } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -150,6 +150,15 @@ export function UserMenuClient({ user, dbUser }: { user: User; dbUser: any }) {
             ) : null}
           </Link>
         </DropdownMenuItem>
+
+        {dbUser?.role === 'student' ? (
+          <DropdownMenuItem asChild>
+            <Link href="/app/favorites" className="cursor-pointer">
+              <Heart className="mr-2 h-4 w-4" />
+              <span>Perfiles guardados</span>
+            </Link>
+          </DropdownMenuItem>
+        ) : null}
 
         {dbUser?.role === 'tutor' ? (
           <DropdownMenuItem asChild>

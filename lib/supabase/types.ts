@@ -90,6 +90,39 @@ export type Database = {
         }
         Relationships: []
       }
+      favorite_tutors: {
+        Row: {
+          created_at: string
+          student_id: number
+          tutor_profile_id: number
+        }
+        Insert: {
+          created_at?: string
+          student_id: number
+          tutor_profile_id: number
+        }
+        Update: {
+          created_at?: string
+          student_id?: number
+          tutor_profile_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_tutors_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_tutors_tutor_profile_id_fkey"
+            columns: ["tutor_profile_id"]
+            isOneToOne: false
+            referencedRelation: "tutor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       purchases: {
         Row: {
           amount: number

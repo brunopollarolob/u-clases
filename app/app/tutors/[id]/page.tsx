@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { RequestClassInline } from '@/components/request-class-inline';
+import { FavoriteTutorButton } from '@/components/favorite-tutor-button';
 import type { Tables } from '@/lib/supabase/types';
 import { getAcademicStatusLabel } from '@/lib/academic-profile';
 
@@ -26,6 +27,7 @@ type UserRow = Tables<'users'>;
 type TutorCourseRow = Tables<'tutor_courses'>;
 type ReviewRow = Tables<'reviews'>;
 type ClassRequestRow = Tables<'class_requests'>;
+type FavoriteTutorRow = Tables<'favorite_tutors'>;
 
 interface TutorDetailPageProps {
   params: Promise<{ id: string }>;
@@ -119,6 +121,7 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
     { data: reviewsData, error: reviewsError },
     { data: acceptedRequestData, error: acceptedRequestError },
     { count: completedClassCount, error: completedClassCountError },
+    { data: favoriteRowData, error: favoriteRowError },
   ] = await Promise.all([
     supabase
       .from('users')
@@ -147,9 +150,17 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
       .select('id', { count: 'exact', head: true })
       .eq('tutor_profile_id', tutorProfile.id)
       .eq('status', 'completed'),
+    userData.dbUser.role === 'student'
+      ? supabase
+          .from('favorite_tutors')
+          .select('student_id, tutor_profile_id')
+          .eq('student_id', userData.dbUser.id)
+          .eq('tutor_profile_id', tutorProfile.id)
+          .maybeSingle()
+      : Promise.resolve({ data: null as Pick<FavoriteTutorRow, 'student_id' | 'tutor_profile_id'> | null, error: null }),
   ]);
 
-  if (tutorUserError || coursesError || tutorCoursesError || reviewsError || acceptedRequestError || completedClassCountError) {
+  if (tutorUserError || coursesError || tutorCoursesError || reviewsError || acceptedRequestError || completedClassCountError || favoriteRowError) {
     throw new Error('No se pudieron cargar los datos del profesor');
   }
 
@@ -197,6 +208,7 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
     ? getAcademicStatusLabel(tutorUser.is_graduated, tutorUser.academic_year)
     : 'Ano no informado';
   const isVerifiedTutor = (completedClassCount || 0) > 0;
+  const isFavoriteTutor = Boolean(favoriteRowData);
   const initials = (tutorUser?.full_name || 'U-clases')
     .split(' ')
     .filter(Boolean)
@@ -218,6 +230,9 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
         <div className="mb-6 flex items-center justify-between gap-3">
           <h1 className="text-3xl font-bold text-foreground">Perfil del profesor</h1>
           <div className="flex items-center gap-2">
+            {userData.dbUser.role === 'student' ? (
+              <FavoriteTutorButton tutorProfileId={tutorProfile.id} initialIsFavorite={isFavoriteTutor} iconOnly={false} />
+            ) : null}
             {userData.dbUser.role === 'student' ? (
               <Button asChild className="h-10 bg-primary px-5 font-semibold text-primary-foreground hover:bg-primary/90">
                 <Link href="#solicitar">Solicitar clase ahora</Link>

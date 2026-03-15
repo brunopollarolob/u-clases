@@ -164,6 +164,7 @@
   }
 }
 
+
 /* Animation Utilities */
 .animate-fade-in {
   animation: fade-in var(--duration-medium) var(--transition-timing);

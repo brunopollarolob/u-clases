@@ -101,7 +101,10 @@ export function FeaturesSection() {
             </span>
           </h2>
 
-          <div className="mx-auto mb-6 max-w-3xl rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-5 text-left animate-fade-in delay-150 shadow-lg shadow-primary/10">
+          <div
+            className={`mx-auto mb-6 max-w-3xl rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-5 text-left shadow-lg shadow-primary/10 transition-all ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} delay-150`}
+            style={{ transitionDuration: 'var(--duration-slow)' }}
+          >
             <p className="mb-3 inline-flex items-center rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
               De foro suelto a ranking real
             </p>
