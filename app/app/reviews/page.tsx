@@ -5,6 +5,7 @@ import { createServiceClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Tables } from '@/lib/supabase/types';
+import { getAcademicSummary } from '@/lib/academic-profile';
 
 type ReviewRow = Tables<'reviews'>;
 type CourseRow = Tables<'courses'>;
@@ -26,6 +27,26 @@ function renderStars(rating: number) {
       />
     );
   });
+}
+
+function extractAuthDisplayName(metadata: unknown): string | null {
+  if (!metadata || typeof metadata !== 'object') return null;
+
+  const data = metadata as Record<string, unknown>;
+  const candidates = [
+    data.full_name,
+    data.name,
+    data.display_name,
+    [data.given_name, data.family_name].filter(Boolean).join(' ').trim(),
+  ];
+
+  for (const candidate of candidates) {
+    if (typeof candidate === 'string' && candidate.trim().length > 0) {
+      return candidate.trim();
+    }
+  }
+
+  return null;
 }
 
 export default async function ReviewsPage() {
@@ -113,8 +134,14 @@ export default async function ReviewsPage() {
 
   const [studentsResult, coursesResult] = await Promise.all([
     studentIds.length
-      ? supabase.from('users').select('id, full_name').in('id', studentIds)
-      : Promise.resolve({ data: [] as Pick<UserRow, 'id' | 'full_name'>[], error: null }),
+      ? supabase
+          .from('users')
+          .select('id, full_name, supabase_user_id, specialization, is_graduated, academic_year')
+          .in('id', studentIds)
+      : Promise.resolve({
+          data: [] as Pick<UserRow, 'id' | 'full_name' | 'supabase_user_id' | 'specialization' | 'is_graduated' | 'academic_year'>[],
+          error: null,
+        }),
     courseIds.length
       ? supabase.from('courses').select('id, name').in('id', courseIds)
       : Promise.resolve({ data: [] as Pick<CourseRow, 'id' | 'name'>[], error: null }),
@@ -124,7 +151,45 @@ export default async function ReviewsPage() {
     throw new Error('No se pudieron cargar los detalles de reseñas');
   }
 
-  const studentById = new Map((studentsResult.data || []).map((student) => [student.id, student]));
+  const students = (studentsResult.data || []) as Pick<
+    UserRow,
+    'id' | 'full_name' | 'supabase_user_id' | 'specialization' | 'is_graduated' | 'academic_year'
+  >[];
+
+  const missingStudentSupabaseIds = students
+    .filter((student) => !student.full_name)
+    .map((student) => student.supabase_user_id);
+
+  const fallbackNameBySupabaseId = new Map<string, string>();
+  const fallbackEmailBySupabaseId = new Map<string, string>();
+
+  if (missingStudentSupabaseIds.length > 0) {
+    const authUsers = await Promise.all(
+      missingStudentSupabaseIds.map(async (supabaseUserId) => {
+        const { data, error } = await supabase.auth.admin.getUserById(supabaseUserId);
+        if (error || !data?.user) {
+          return { supabaseUserId, email: null as string | null, name: null as string | null };
+        }
+
+        return {
+          supabaseUserId,
+          email: data.user.email,
+          name: extractAuthDisplayName(data.user.user_metadata),
+        };
+      })
+    );
+
+    for (const item of authUsers) {
+      if (item.name) {
+        fallbackNameBySupabaseId.set(item.supabaseUserId, item.name);
+      }
+      if (item.email) {
+        fallbackEmailBySupabaseId.set(item.supabaseUserId, item.email);
+      }
+    }
+  }
+
+  const studentById = new Map(students.map((student) => [student.id, student]));
   const courseById = new Map((coursesResult.data || []).map((course) => [course.id, course]));
 
   const averageRating = reviews.length > 0
@@ -147,13 +212,13 @@ export default async function ReviewsPage() {
         <div className="mb-6 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background px-5 py-6">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Feedback de alumnos
+            Feedback de alumnos/as
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Reseñas recibidas</h1>
               <p className="mt-1 text-muted-foreground">
-                Historial completo de comentarios y calificaciones de tus alumnos.
+                Historial completo de comentarios y calificaciones de tus alumnos/as.
               </p>
             </div>
             <Button asChild variant="outline">
@@ -218,6 +283,14 @@ export default async function ReviewsPage() {
             {reviews.map((review) => {
               const student = studentById.get(review.student_id);
               const course = review.course_id ? courseById.get(review.course_id) : null;
+              const studentAcademicSummary = student
+                ? getAcademicSummary(student.specialization, student.is_graduated, student.academic_year)
+                : 'Perfil academico no informado';
+              const studentDisplayName =
+                student?.full_name ||
+                (student?.supabase_user_id ? fallbackNameBySupabaseId.get(student.supabase_user_id) : null) ||
+                (student?.supabase_user_id ? fallbackEmailBySupabaseId.get(student.supabase_user_id) : null) ||
+                `Alumno/a (${String(review.student_id)})`;
 
               return (
                 <Card key={review.id} className="border-border/80 bg-gradient-to-b from-background to-muted/15">
@@ -234,8 +307,11 @@ export default async function ReviewsPage() {
 
                     <div className="mb-2 inline-flex items-center gap-1.5 text-sm text-foreground">
                       <UserRound className="h-4 w-4 text-muted-foreground" />
-                      Alumno: {student?.full_name || 'Alumno/a'}
+                      Alumno/a: {studentDisplayName}
                     </div>
+                    <p className="mb-2 text-xs text-muted-foreground">
+                      {studentAcademicSummary}
+                    </p>
 
                     <div className="rounded-md border border-border bg-muted/20 p-3 text-sm text-foreground">
                       <span className="mr-1 inline-flex align-middle text-muted-foreground">

@@ -200,15 +200,19 @@ export default async function AppPage() {
               { id: 'MA2002', name: 'Cálculo Avanzado y Aplicaciones' },
               { id: 'IN2201', name: 'Economía' },
             ].map((course) => (
-              <div
+              <Link
                 key={course.id}
-                className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/30 hover:bg-primary/5 transition-colors cursor-pointer"
+                href={{
+                  pathname: '/app/classes',
+                  query: { course: course.id },
+                }}
+                className="flex items-center gap-3 rounded-lg border border-border p-3 transition-colors hover:border-primary/30 hover:bg-primary/5"
               >
-                <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-1 rounded">
+                <span className="rounded bg-primary/10 px-2 py-1 font-mono text-xs font-bold text-primary">
                   {course.id}
                 </span>
                 <span className="text-sm text-foreground">{course.name}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
