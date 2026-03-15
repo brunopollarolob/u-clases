@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { Header } from '@/components/header';
 import { useAuth } from '@/lib/auth/auth-provider';
+import { UClasesLogo } from '@/components/uclases-logo';
 
 export function ConditionalHeader() {
   const pathname = usePathname();
@@ -20,10 +21,7 @@ export function ConditionalHeader() {
     return (
       <header className="border-b border-border bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <div className="h-6 w-6 bg-primary rounded-full" />
-            <span className="ml-2 text-xl font-semibold text-foreground">SaaS Template for AI</span>
-          </div>
+          <UClasesLogo compact />
           <div className="flex items-center space-x-4">
             <div className="h-9 w-32 bg-muted animate-pulse rounded-md"></div>
           </div>

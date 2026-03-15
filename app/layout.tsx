@@ -10,10 +10,10 @@ import { getOptionalUser } from '@/lib/auth/dal';
 
 export const metadata: Metadata = {
   title: {
-    default: 'U-clases | FCFM',
+    default: 'U-clases · Clases particulares FCFM',
     template: '%s | U-clases',
   },
-  description: 'Plataforma de clases particulares para estudiantes y profesores de la FCFM.',
+  description: 'Plataforma de clases particulares para estudiantes y profesores de la FCFM (Beauchef).',
   icons: {
     icon: '/icon.svg',
     shortcut: '/icon.svg',
@@ -42,7 +42,7 @@ export default async function RootLayout({
   const initialDbUser = userData?.dbUser || null;
 
   return (
-    <html lang="en">
+    <html lang="es">
       <head>
         {/* Performance optimizations */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

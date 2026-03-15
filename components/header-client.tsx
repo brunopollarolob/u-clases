@@ -13,6 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/lib/auth/auth-provider';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 
 interface UserMenuClientProps {
@@ -41,6 +42,7 @@ export function NavigationButtons({ userData }: { userData: any }) {
 }
 
 export function UserMenuClient({ user, dbUser }: { user: User; dbUser: any }) {
+  const router = useRouter();
   const [signOutPending, setSignOutPending] = useState(false);
   const [notificationsCount, setNotificationsCount] = useState<NotificationCounts>({
     total: 0,
@@ -86,7 +88,12 @@ export function UserMenuClient({ user, dbUser }: { user: User; dbUser: any }) {
     if (signOutPending) return;
     
     setSignOutPending(true);
-    await signOut();
+    const result = await signOut();
+    if (result.success) {
+      router.replace('/sign-in');
+      router.refresh();
+      return;
+    }
     setSignOutPending(false);
   };
 

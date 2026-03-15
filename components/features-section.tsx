@@ -111,7 +111,7 @@ export function FeaturesSection() {
             </h3>
 
             <p className="text-sm md:text-base text-foreground/90 leading-relaxed mb-4">
-              Actualmente, el principal medio para ofrecer clases particulares es el foro institucional de U-Cursos,
+              Actualmente, el principal medio para ofrecer clases particulares es U-Cursos,
               una plataforma que no está optimizada para este fin. Así nace U-clases: centralizar a los profes en
               un solo lugar con un sistema de puntuación robusto.
             </p>

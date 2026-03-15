@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { BookOpen, ArrowRight, GraduationCap, Search } from 'lucide-react';
 import Link from 'next/link';
 import { User } from '@/lib/supabase/types';
+import { UClasesLogo } from '@/components/uclases-logo';
 
 interface HeroSectionProps {
   user: User | null;
@@ -74,6 +75,10 @@ export function HeroSection({ user, topTutors = [] }: HeroSectionProps) {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Columna izquierda */}
           <div className={`text-center lg:text-left transition-all ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ transitionDuration: 'var(--duration-slow)' }}>
+            <div className="mb-6 flex justify-center lg:justify-start animate-scale-in">
+              <UClasesLogo />
+            </div>
+
             <div className="badge badge-primary mb-6 animate-scale-in">
               <BookOpen className="w-4 h-4 mr-2" />
               Solo para la FCFM · Beauchef

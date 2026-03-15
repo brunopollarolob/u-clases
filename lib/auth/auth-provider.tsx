@@ -340,10 +340,7 @@ export function AuthProvider({
       console.log(`[AUTH] Sign out success: ${user?.email}`);
       setUser(null);
       setDbUser(null);
-      
-      // Force page refresh to trigger server-side auth check
-      window.location.href = '/';
-      
+
       return { success: true };
 
     } catch (error) {

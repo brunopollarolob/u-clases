@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/lib/auth/auth-provider';
 import { config } from '@/lib/config';
 import { SPECIALIZATION_OPTIONS } from '@/lib/academic-profile';
+import { UClasesLogo } from '@/components/uclases-logo';
 
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const searchParams = useSearchParams();
@@ -93,7 +94,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       }
 
       if (isSignup && 'requiresConfirmation' in result && result.requiresConfirmation) {
-        setSuccess('Cuenta creada. Revisa tu correo para confirmar tu cuenta antes de iniciar sesion.');
+        setSuccess('Cuenta creada. Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.');
         return;
       }
 
@@ -116,7 +117,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
       const result = await signInWithGoogle(googleRedirectPath);
 
       if (!result.success) {
-        setError(result.error || 'No se pudo iniciar sesion con Google.');
+        setError(result.error || 'No se pudo iniciar sesión con Google.');
         setGoogleLoading(false);
       }
     } catch {
@@ -141,8 +142,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
 
           <div className="relative z-10 flex flex-col justify-center px-12 py-16 text-primary-foreground animate-slide-up">
             <div className="mb-8">
-              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-background/20 backdrop-blur-sm animate-scale-in">
-                <GraduationCap className="h-8 w-8 text-primary-foreground" />
+              <div className="mb-6 inline-flex items-center rounded-2xl bg-background/15 px-3 py-2 backdrop-blur-sm animate-scale-in">
+                <UClasesLogo className="[&_.text-foreground]:text-primary-foreground [&_.text-primary]:text-primary-foreground" />
               </div>
               <h1 className="mb-4 text-4xl font-bold text-foreground animate-fade-in delay-100">U-clases en Beauchef</h1>
               <p className="text-xl leading-relaxed text-primary-foreground/80 animate-fade-in delay-200">
@@ -185,8 +186,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
 
             <div className="mb-8 animate-fade-in delay-200">
               <div className="mb-6 flex items-center">
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl gradient-bg shadow-lg hover-scale">
-                  <GraduationCap className="h-6 w-6 text-primary-foreground" />
+                <div className="inline-flex items-center rounded-xl bg-primary/10 px-2 py-1 shadow-sm">
+                  <UClasesLogo compact className="[&_.text-foreground]:text-foreground" />
                 </div>
                 <div className="ml-4">
                   <h1 className="text-2xl font-bold text-gray-900">
@@ -194,7 +195,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                   </h1>
                   <p className="text-sm text-gray-600">
                     {mode === 'signin'
-                      ? 'Inicia sesion para continuar a U-clases'
+                      ? 'Inicia sesión para continuar a U-clases'
                       : signupStep === 1
                         ? 'Paso 1 de 2: acceso de cuenta'
                         : 'Paso 2 de 2: completa tu perfil'}
@@ -368,10 +369,10 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 {pending ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    {mode === 'signin' ? 'Iniciando sesion...' : signupStep === 1 ? 'Validando...' : 'Creando cuenta...'}
+                    {mode === 'signin' ? 'Iniciando sesión...' : signupStep === 1 ? 'Validando...' : 'Creando cuenta...'}
                   </>
                 ) : mode === 'signin' ? (
-                  'Iniciar sesion'
+                  'Iniciar sesión'
                 ) : signupStep === 1 ? (
                   'Continuar'
                 ) : (
@@ -461,7 +462,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                   className="font-semibold text-primary transition-opacity hover:opacity-80 hover-scale"
                   style={{ transitionDuration: 'var(--duration-fast)' }}
                 >
-                  {mode === 'signin' ? 'Registrate' : 'Inicia sesion'}
+                  {mode === 'signin' ? 'Regístrate' : 'Inicia sesión'}
                 </Link>
               </p>
             </div>
