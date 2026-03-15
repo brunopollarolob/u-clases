@@ -468,7 +468,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             </div>
 
             <div className="mt-8 animate-fade-in delay-700 text-center">
-              <p className="text-xs text-muted-foreground">Protegido con autenticacion segura y cifrado estandar.</p>
+              <p className="text-xs text-muted-foreground">Protegido con autenticación segura y cifrado estándar.</p>
             </div>
           </div>
         </div>

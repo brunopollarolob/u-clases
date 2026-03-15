@@ -179,7 +179,7 @@ export default async function AppPage() {
         <div>
           <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
             <Star className="h-5 w-5 text-primary" />
-            Ramos de Plan Común disponibles
+            Ramos de Plan Común disponibles (especialidad próximamente...)
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {[

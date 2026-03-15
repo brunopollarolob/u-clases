@@ -13,8 +13,8 @@ import React, { useEffect, useState } from 'react';
 
 const features = [
   {
-    title: 'Ramos de Plan Común',
-    description: 'Filtra profesores por los 16 ramos clave del Plan Común de la FCFM: Cálculo, Álgebra, Física, Química y más.',
+    title: 'Ramos de Plan Común (Especialidad próximamente...)',
+    description: 'Filtra profesores por los 16 ramos clave del Plan Común de la FCFM..',
     icon: Filter,
     gradient: 'from-primary to-primary/70',
     delay: 'delay-100',
@@ -57,7 +57,7 @@ const features = [
 ];
 
 const stats = [
-  { value: '16', label: 'Ramos de Plan Común', delay: 'delay-100' },
+  { value: '16', label: 'Ramos de Plan Común (especialidad próximamente...)', delay: 'delay-100' },
   { value: '100%', label: 'Gratuita', delay: 'delay-200' },
   { value: 'FCFM', label: 'Exclusiva Beauchef', delay: 'delay-300' },
   { value: '5★', label: 'Sistema de Reseñas', delay: 'delay-400' },
