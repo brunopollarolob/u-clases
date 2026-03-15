@@ -52,12 +52,15 @@ export default async function TutorProfileManagementPage() {
     );
   }
 
-  const courseIds = (
+  const tutorCourseRows = (
     await supabase
       .from('tutor_courses')
-      .select('course_id')
+      .select('course_id, is_ta')
       .eq('tutor_profile_id', profile.id)
-  ).data?.map((item) => item.course_id) || [];
+  ).data || [];
+
+  const courseIds = tutorCourseRows.map((item) => item.course_id);
+  const taCourseIds = tutorCourseRows.filter((item) => item.is_ta).map((item) => item.course_id);
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,6 +85,7 @@ export default async function TutorProfileManagementPage() {
           initialRole={userData.dbUser.role}
           initialProfile={profile}
           initialCourseIds={courseIds}
+          initialTaCourseIds={taCourseIds}
           courses={courses || []}
         />
 

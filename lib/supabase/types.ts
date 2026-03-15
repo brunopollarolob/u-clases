@@ -225,14 +225,17 @@ export type Database = {
       tutor_courses: {
         Row: {
           course_id: string
+          is_ta: boolean
           tutor_profile_id: number
         }
         Insert: {
           course_id: string
+          is_ta?: boolean
           tutor_profile_id: number
         }
         Update: {
           course_id?: string
+          is_ta?: boolean
           tutor_profile_id?: number
         }
         Relationships: [

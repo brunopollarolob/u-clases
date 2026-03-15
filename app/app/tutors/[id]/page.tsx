@@ -174,8 +174,15 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
 
   const courseById = new Map(allCourses.map((course) => [course.id, course]));
   const courses = tutorCourses
-    .map((tutorCourse) => courseById.get(tutorCourse.course_id))
-    .filter((course): course is CourseRow => Boolean(course));
+    .map((tutorCourse) => {
+      const course = courseById.get(tutorCourse.course_id);
+      if (!course) return null;
+      return {
+        ...course,
+        is_ta: Boolean(tutorCourse.is_ta),
+      } as CourseRow & { is_ta: boolean };
+    })
+    .filter((course): course is CourseRow & { is_ta: boolean } => Boolean(course));
 
   const reviewsByCourse = new Map<string, typeof reviews>();
   for (const review of reviews) {
@@ -340,6 +347,7 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
                   >
                     <BookOpen className="h-3.5 w-3.5" />
                     {course.id} - {course.name}
+                    {course.is_ta ? <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-semibold">Auxiliar</span> : null}
                   </span>
                 ))}
               </div>

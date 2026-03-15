@@ -15,6 +15,7 @@ const updateTutorProfileSchema = z
     contactInfo: z.string().trim().max(200).optional(),
     isActive: z.boolean(),
     courseIds: z.array(z.string().trim().min(1)).max(30),
+    taCourseIds: z.array(z.string().trim().min(1)).max(30).optional(),
   })
   .refine((data) => !data.isActive || data.courseIds.length >= 1, {
     message: 'Debes seleccionar al menos un ramo para publicar el perfil',
@@ -45,13 +46,14 @@ export async function GET() {
       return NextResponse.json({
         profile: null,
         courseIds: [],
+        taCourseIds: [],
         role: userData.dbUser.role,
       });
     }
 
     const { data: tutorCourses, error: tutorCoursesError } = await supabase
       .from('tutor_courses')
-      .select('course_id')
+      .select('course_id, is_ta')
       .eq('tutor_profile_id', profile.id);
 
     if (tutorCoursesError) {
@@ -62,6 +64,7 @@ export async function GET() {
     return NextResponse.json({
       profile,
       courseIds: (tutorCourses || []).map((item) => item.course_id),
+      taCourseIds: (tutorCourses || []).filter((item) => item.is_ta).map((item) => item.course_id),
       role: userData.dbUser.role,
     });
   } catch (error) {
@@ -90,7 +93,13 @@ export async function PUT(request: NextRequest) {
     const payload = parsed.data;
     const classPrice = payload.classPrice ?? payload.hourlyRate ?? null;
     const classDurationMinutes = payload.classDurationMinutes ?? 60;
+    const taCourseIds = payload.taCourseIds || [];
     const supabase = await createServiceClient();
+
+    const taCourseIdsAreSubset = taCourseIds.every((courseId) => payload.courseIds.includes(courseId));
+    if (!taCourseIdsAreSubset) {
+      return NextResponse.json({ error: 'Los ramos marcados como auxiliar deben estar seleccionados en tu perfil' }, { status: 400 });
+    }
 
     const { data: validCourses, error: coursesError } = await supabase
       .from('courses')
@@ -157,6 +166,7 @@ export async function PUT(request: NextRequest) {
       const courseRows = payload.courseIds.map((courseId) => ({
         tutor_profile_id: upsertedProfile.id,
         course_id: courseId,
+        is_ta: taCourseIds.includes(courseId),
       }));
 
       const { error: insertCoursesError } = await supabase.from('tutor_courses').insert(courseRows);
@@ -171,6 +181,7 @@ export async function PUT(request: NextRequest) {
       success: true,
       profile: upsertedProfile,
       courseIds: payload.courseIds,
+      taCourseIds,
     });
   } catch (error) {
     if (error instanceof Error && error.message === 'Authentication required') {

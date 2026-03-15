@@ -31,6 +31,7 @@ interface TutorProfileFormProps {
   initialRole: 'student' | 'tutor';
   initialProfile: TutorProfile | null;
   initialCourseIds: string[];
+  initialTaCourseIds: string[];
   courses: Course[];
 }
 
@@ -40,6 +41,7 @@ export function TutorProfileForm({
   initialRole,
   initialProfile,
   initialCourseIds,
+  initialTaCourseIds,
   courses,
 }: TutorProfileFormProps) {
   const [fullName, setFullName] = useState(initialFullName);
@@ -59,6 +61,7 @@ export function TutorProfileForm({
   const [avatarUrl, setAvatarUrl] = useState(initialAvatarUrl);
   const [isActive, setIsActive] = useState(initialProfile?.is_active ?? true);
   const [selectedCourses, setSelectedCourses] = useState<Set<string>>(new Set(initialCourseIds));
+  const [taCourses, setTaCourses] = useState<Set<string>>(new Set(initialTaCourseIds));
   const [pending, setPending] = useState(false);
   const [avatarUploadPending, setAvatarUploadPending] = useState(false);
   const [deactivatePending, setDeactivatePending] = useState(false);
@@ -86,6 +89,23 @@ export function TutorProfileForm({
       const next = new Set(prev);
       if (next.has(courseId)) {
         next.delete(courseId);
+        setTaCourses((prevTa) => {
+          const nextTa = new Set(prevTa);
+          nextTa.delete(courseId);
+          return nextTa;
+        });
+      } else {
+        next.add(courseId);
+      }
+      return next;
+    });
+  };
+
+  const toggleTaCourse = (courseId: string) => {
+    setTaCourses((prev) => {
+      const next = new Set(prev);
+      if (next.has(courseId)) {
+        next.delete(courseId);
       } else {
         next.add(courseId);
       }
@@ -106,6 +126,7 @@ export function TutorProfileForm({
       const parsedClassPrice = classPrice.trim() === '' ? null : Number(classPrice);
       const parsedClassDuration = Number(classDurationMinutes);
       const courseIds = Array.from(selectedCourses);
+      const taCourseIds = Array.from(taCourses).filter((courseId) => selectedCourses.has(courseId));
 
       const response = await fetch('/api/tutor/profile', {
         method: 'PUT',
@@ -121,13 +142,14 @@ export function TutorProfileForm({
           contactInfo,
           isActive,
           courseIds,
+          taCourseIds,
         }),
       });
 
       const payload = await response.json();
 
       if (!response.ok) {
-        setErrorMessage(payload.error || 'No se pudo guardar el perfil de profesor.');
+        setErrorMessage(payload.error || 'No se pudo guardar el perfil de profesor/a.');
         return;
       }
 
@@ -173,6 +195,7 @@ export function TutorProfileForm({
 
       setIsActive(false);
       setSelectedCourses(new Set());
+      setTaCourses(new Set());
       setDeactivateConfirmText('');
       setSuccessMessage(payload.message || 'Perfil de profesor dado de baja correctamente.');
     } catch {
@@ -358,22 +381,34 @@ export function TutorProfileForm({
               <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {courses.map((course) => {
                   const checked = selectedCourses.has(course.id);
+                  const taChecked = taCourses.has(course.id);
                   return (
-                    <label
+                    <div
                       key={course.id}
-                      className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm hover:border-primary/40"
+                      className="rounded-md border border-border px-3 py-2 text-sm hover:border-primary/40"
                     >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleCourse(course.id)}
-                        className="mt-0.5"
-                      />
-                      <span>
-                        <strong className="mr-1 text-primary">{course.id}</strong>
-                        {course.name}
-                      </span>
-                    </label>
+                      <label className="flex cursor-pointer items-start gap-2">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleCourse(course.id)}
+                          className="mt-0.5"
+                        />
+                        <span>
+                          <strong className="mr-1 text-primary">{course.id}</strong>
+                          {course.name}
+                        </span>
+                      </label>
+                      <label className={`mt-2 flex items-center gap-2 text-xs ${checked ? 'text-foreground' : 'text-muted-foreground'}`}>
+                        <input
+                          type="checkbox"
+                          checked={taChecked}
+                          disabled={!checked}
+                          onChange={() => toggleTaCourse(course.id)}
+                        />
+                        Fui/soy auxiliar de este ramo
+                      </label>
+                    </div>
                   );
                 })}
               </div>
@@ -394,7 +429,7 @@ export function TutorProfileForm({
 
           {initialRole === 'student' ? (
             <p className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-sm text-primary">
-              Al guardar, tu rol se actualizara a profesor para habilitar las funciones de publicacion.
+              Al guardar, tu rol se actualizara a profesor/a para habilitar las funciones de publicacion.
             </p>
           ) : null}
 
@@ -411,12 +446,12 @@ export function TutorProfileForm({
           ) : null}
 
           <Button type="submit" disabled={pending || avatarUploadPending} className="gradient-bg w-full sm:w-auto">
-            {pending ? 'Guardando...' : 'Guardar perfil de profesor'}
+            {pending ? 'Guardando...' : 'Guardar perfil de profesor/a'}
           </Button>
 
           {hasExistingProfile ? (
             <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4">
-              <h3 className="text-sm font-semibold text-destructive">Dar de baja perfil de profesor</h3>
+              <h3 className="text-sm font-semibold text-destructive">Dar de baja perfil de profesor/a</h3>
               <p className="mt-1 text-xs text-muted-foreground">
                 Esto ocultara tu perfil para alumnos y quitara los ramos publicados. Para confirmar, escribe <strong>BAJA</strong>.
               </p>

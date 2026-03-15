@@ -34,8 +34,11 @@ interface ClassesPageProps {
   searchParams?: {
     course?: string;
     maxRate?: string;
+    sort?: string;
   };
 }
+
+type TutorSortMode = 'popular' | 'rating' | 'price';
 
 function renderStars(rating: number) {
   const boundedRating = Math.max(0, Math.min(5, rating));
@@ -58,6 +61,14 @@ function parseMaxRate(raw?: string): number | null {
   const parsed = Number(raw);
   if (!Number.isFinite(parsed) || parsed <= 0) return null;
   return parsed;
+}
+
+function parseSortMode(raw?: string): TutorSortMode {
+  if (raw === 'rating' || raw === 'price') {
+    return raw;
+  }
+
+  return 'popular';
 }
 
 function normalizeWhatsAppLink(raw: string | null): { href: string; label: string } | null {
@@ -90,6 +101,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
 
   const selectedCourse = searchParams?.course?.trim() || '';
   const maxRate = parseMaxRate(searchParams?.maxRate);
+  const sortMode = parseSortMode(searchParams?.sort);
 
   const { data: coursesData, error: coursesError } = await supabase
     .from('courses')
@@ -228,13 +240,18 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
   const pendingRequestsByTutor = new Map<number, number>();
   const studentCountByTutor = new Map<number, number>();
   const completedClassCountByTutor = new Map<number, number>();
+  const averageRatingByTutor = new Map<number, number>();
+  const reviewCountByTutor = new Map<number, number>();
 
   for (const tutorCourse of tutorCourses) {
     const course = courseById.get(tutorCourse.course_id);
     if (!course) continue;
 
     const existing = coursesByTutorProfile.get(tutorCourse.tutor_profile_id) || [];
-    existing.push(course);
+    existing.push({
+      ...course,
+      is_ta: Boolean(tutorCourse.is_ta),
+    } as CourseRow & { is_ta: boolean });
     coursesByTutorProfile.set(tutorCourse.tutor_profile_id, existing);
   }
 
@@ -280,9 +297,17 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
     studentCountByTutor.set(tutorProfileId, uniqueStudents.size);
   }
 
+  for (const [tutorProfileId, tutorReviews] of allReviewsByTutor.entries()) {
+    reviewCountByTutor.set(tutorProfileId, tutorReviews.length);
+    if (tutorReviews.length === 0) continue;
+
+    const average = tutorReviews.reduce((sum, review) => sum + review.rating, 0) / tutorReviews.length;
+    averageRatingByTutor.set(tutorProfileId, average);
+  }
+
   const tutors = tutorProfiles
     .map((profile) => {
-      const courses = coursesByTutorProfile.get(profile.id) || [];
+      const courses = (coursesByTutorProfile.get(profile.id) || []) as (CourseRow & { is_ta: boolean })[];
       const user = userById.get(profile.user_id);
       return {
         profile,
@@ -293,6 +318,9 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
         pendingReservations: pendingRequestsByTutor.get(profile.id) || 0,
         studentCount: studentCountByTutor.get(profile.id) || 0,
         completedClassCount: completedClassCountByTutor.get(profile.id) || 0,
+        overallRating: averageRatingByTutor.get(profile.id) ?? null,
+        reviewCount: reviewCountByTutor.get(profile.id) || 0,
+        classPrice: profile.class_price ?? profile.hourly_rate ?? null,
         isFavorite: favoriteTutorProfileIds.has(profile.id),
         subjectCount: courses.length,
         specializationLabel:
@@ -314,6 +342,55 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
         return false;
       }
       return true;
+    })
+    .sort((a, b) => {
+      if (sortMode === 'rating') {
+        const ratingA = a.overallRating ?? -1;
+        const ratingB = b.overallRating ?? -1;
+        if (ratingB !== ratingA) {
+          return ratingB - ratingA;
+        }
+        if (b.reviewCount !== a.reviewCount) {
+          return b.reviewCount - a.reviewCount;
+        }
+        if (b.studentCount !== a.studentCount) {
+          return b.studentCount - a.studentCount;
+        }
+        return a.displayName.localeCompare(b.displayName, 'es');
+      }
+
+      if (sortMode === 'price') {
+        const priceA = a.classPrice ?? Number.POSITIVE_INFINITY;
+        const priceB = b.classPrice ?? Number.POSITIVE_INFINITY;
+        if (priceA !== priceB) {
+          return priceA - priceB;
+        }
+        if (b.studentCount !== a.studentCount) {
+          return b.studentCount - a.studentCount;
+        }
+        const ratingA = a.overallRating ?? -1;
+        const ratingB = b.overallRating ?? -1;
+        if (ratingB !== ratingA) {
+          return ratingB - ratingA;
+        }
+        return a.displayName.localeCompare(b.displayName, 'es');
+      }
+
+      if (b.studentCount !== a.studentCount) {
+        return b.studentCount - a.studentCount;
+      }
+
+      const ratingA = a.overallRating ?? -1;
+      const ratingB = b.overallRating ?? -1;
+      if (ratingB !== ratingA) {
+        return ratingB - ratingA;
+      }
+
+      if (b.reviewCount !== a.reviewCount) {
+        return b.reviewCount - a.reviewCount;
+      }
+
+      return a.displayName.localeCompare(b.displayName, 'es');
     });
 
   const activePublishedTutorsCount = tutorProfiles.filter((profile) => {
@@ -379,6 +456,22 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
                 />
               </div>
 
+              <div>
+                <label htmlFor="sort" className="mb-2 block text-sm font-medium text-foreground">
+                  Ordenar por
+                </label>
+                <select
+                  id="sort"
+                  name="sort"
+                  defaultValue={sortMode}
+                  className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <option value="popular">Popularidad</option>
+                  <option value="rating">Mejor evaluados</option>
+                  <option value="price">Menor precio</option>
+                </select>
+              </div>
+
               <div className="md:col-span-3 flex gap-3">
                 <Button type="submit" className="gradient-bg">
                   Aplicar filtros
@@ -414,13 +507,8 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
           </Card>
         ) : (
           <div className="grid gap-4">
-            {tutors.map(({ profile, courses, displayName, avatarUrl, email, pendingReservations, studentCount, subjectCount, completedClassCount, isFavorite, specializationLabel, academicStatusLabel }) => {
+            {tutors.map(({ profile, courses, displayName, avatarUrl, email, pendingReservations, studentCount, subjectCount, completedClassCount, overallRating, reviewCount, isFavorite, specializationLabel, academicStatusLabel }) => {
               const recentComments = (recentCommentedReviewsByTutor.get(profile.id) || []).slice(0, 2);
-              const tutorReviews = allReviewsByTutor.get(profile.id) || [];
-              const overallRating =
-                tutorReviews.length > 0
-                  ? tutorReviews.reduce((sum, review) => sum + review.rating, 0) / tutorReviews.length
-                  : null;
               const whatsappContact = normalizeWhatsAppLink(profile.contact_info);
               const contactEmail = normalizeEmail(email);
               const initials = displayName
@@ -482,7 +570,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
                           {overallRating ? (
                             <div className="rounded-md border border-foreground/15 bg-foreground px-2.5 py-1 text-right text-background shadow-sm dark:border-background/20 dark:bg-background dark:text-foreground">
                               <p className="text-xs font-semibold">{overallRating.toFixed(1)} / 5</p>
-                              <p className="text-[11px] font-medium opacity-90">{tutorReviews.length} reseñas</p>
+                              <p className="text-[11px] font-medium opacity-90">{reviewCount} reseñas</p>
                             </div>
                           ) : null}
                         </div>
@@ -496,6 +584,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
                                 className="inline-flex rounded-full border border-border/70 bg-muted/20 px-2 py-0.5 text-xs text-foreground"
                               >
                                 {course.id} - {course.name}
+                                {course.is_ta ? <span className="ml-1.5 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] font-semibold text-primary">Auxiliar</span> : null}
                               </span>
                             ))}
                           </div>

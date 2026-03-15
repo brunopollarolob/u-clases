@@ -70,6 +70,7 @@ export default async function TutorPage() {
             initialRole={userData.dbUser.role}
             initialProfile={null}
             initialCourseIds={[]}
+            initialTaCourseIds={[]}
             courses={courses || []}
           />
         )}
