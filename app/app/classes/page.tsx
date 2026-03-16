@@ -485,11 +485,11 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
         </Card>
 
         <div className="mb-4 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-md border border-primary/25 bg-primary/5 px-3 py-2">
+          <div className="rounded-md border border-border bg-muted/20 px-3 py-2">
             <p className="text-xs text-muted-foreground">Profesores activos publicados</p>
             <p className="text-lg font-semibold text-foreground">{activePublishedTutorsCount}</p>
           </div>
-          <div className="rounded-md border border-border px-3 py-2">
+          <div className="rounded-md border border-border bg-muted/20 px-3 py-2">
             <p className="text-xs text-muted-foreground">Resultados con filtros actuales</p>
             <p className="text-lg font-semibold text-foreground">{tutors.length}</p>
           </div>

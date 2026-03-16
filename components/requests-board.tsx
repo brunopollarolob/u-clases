@@ -304,7 +304,7 @@ export function RequestsBoard({
 
           {incoming.length === 0 ? (
             <p className="rounded-md border border-border p-4 text-sm text-muted-foreground">
-              Aun no recibes solicitudes.
+              Aún no recibes solicitudes.
             </p>
           ) : (
             incoming.map((request) => (

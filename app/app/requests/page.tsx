@@ -51,7 +51,7 @@ export default async function RequestsPage({ searchParams }: RequestsPageProps) 
     .update({ request_notifications_seen_at: new Date().toISOString() })
     .eq('id', userData.dbUser.id);
 
-  const initialNotice = searchParams?.created === '1' ? 'Solicitud creada. Ahora puedes seguir el estado desde aqui.' : '';
+  const initialNotice = searchParams?.created === '1' ? 'Solicitud creada. Ahora puedes seguir el estado desde aquí.' : '';
 
   const studentRequestsQuery = await supabase
     .from('class_requests')
@@ -248,7 +248,7 @@ export default async function RequestsPage({ searchParams }: RequestsPageProps) 
         `Alumno/a (${student?.supabase_user_id.slice(0, 8) || 'sin-nombre'})`,
       studentAcademicSummary: student
         ? getAcademicSummary(student.specialization, student.is_graduated, student.academic_year)
-        : 'Perfil academico no informado',
+        : 'Perfil académico no informado',
       courseLabel: course ? `${course.id} - ${course.name}` : request.course_id,
       status: request.status as 'pending' | 'accepted' | 'rejected' | 'completed' | 'cancelled',
       studentNote: request.student_note,
@@ -271,7 +271,7 @@ export default async function RequestsPage({ searchParams }: RequestsPageProps) 
             <div>
               <h1 className="text-3xl font-bold text-foreground">Panel de solicitudes</h1>
               <p className="mt-1 text-muted-foreground">
-                Gestion centralizada de solicitudes, estados de clases y reseñas.
+                Gestión centralizada de solicitudes, estados de clases y reseñas.
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -291,7 +291,7 @@ export default async function RequestsPage({ searchParams }: RequestsPageProps) 
         <div className="mb-6 rounded-md border border-border bg-muted/20 px-3 py-2 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <ClipboardList className="h-4 w-4" />
-            Desde este panel se gestiona todo el flujo: solicitud, aceptacion, completado y reseña.
+            Desde este panel se gestiona todo el flujo: solicitud, aceptación, completado y reseña.
             <Sparkles className="h-3.5 w-3.5 text-primary" />
           </span>
         </div>

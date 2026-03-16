@@ -228,7 +228,7 @@ export default async function ReviewsPage() {
         </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-2">
-          <Card className="border-primary/20 bg-primary/5">
+          <Card className="border-border bg-muted/10">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <BarChart3 className="h-4 w-4 text-primary" />
@@ -245,7 +245,7 @@ export default async function ReviewsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-border bg-muted/10">
             <CardHeader>
               <CardTitle className="text-base">Promedio por ramo</CardTitle>
             </CardHeader>

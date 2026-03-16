@@ -63,7 +63,7 @@ export default async function AppPage() {
         </div>
 
         <div className="mb-8 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-lg border border-primary/25 bg-primary/10 px-4 py-3">
+          <div className="rounded-lg border border-border bg-muted/20 px-4 py-3">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Perfil</p>
             <p className="mt-1 text-sm font-semibold text-foreground">{userData.dbUser.role === 'tutor' ? 'Profesor' : 'Alumno'}</p>
           </div>
@@ -121,7 +121,7 @@ export default async function AppPage() {
         </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-2">
-          <Card className="border-primary/20 bg-primary/5">
+          <Card className="border-border bg-muted/10">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <ClipboardList className="h-4 w-4 text-primary" />
