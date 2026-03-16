@@ -53,7 +53,7 @@ export function RequestClassInline({ tutorProfileId, courses }: RequestClassInli
   return (
     <div className="space-y-2 rounded-md border border-border p-3">
       <p className="text-base font-semibold text-foreground">Solicitar clase</p>
-      <p className="text-xs text-muted-foreground">Selecciona ramo, agrega un mensaje opcional y envia tu solicitud al profesor.</p>
+      <p className="text-xs text-muted-foreground">Selecciona ramo, agrega un mensaje opcional y envía tu solicitud al profesor.</p>
       <select
         value={selectedCourseId}
         onChange={(e) => setSelectedCourseId(e.target.value)}

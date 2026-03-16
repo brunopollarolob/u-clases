@@ -251,7 +251,7 @@ export default async function ReviewsPage() {
             </CardHeader>
             <CardContent className="space-y-1 text-sm">
               {Array.from(courseSummary.entries()).length === 0 ? (
-                <p className="text-muted-foreground">Aun no tienes reseñas.</p>
+                <p className="text-muted-foreground">Aún no tienes reseñas.</p>
               ) : (
                 Array.from(courseSummary.entries()).map(([courseId, value]) => {
                   const course = courseById.get(courseId);
@@ -275,7 +275,7 @@ export default async function ReviewsPage() {
         {reviews.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center text-sm text-muted-foreground">
-              Aun no has recibido reseñas.
+              Aún no has recibido reseñas.
             </CardContent>
           </Card>
         ) : (
@@ -285,7 +285,7 @@ export default async function ReviewsPage() {
               const course = review.course_id ? courseById.get(review.course_id) : null;
               const studentAcademicSummary = student
                 ? getAcademicSummary(student.specialization, student.is_graduated, student.academic_year)
-                : 'Perfil academico no informado';
+                : 'Perfil académico no informado';
               const studentDisplayName =
                 student?.full_name ||
                 (student?.supabase_user_id ? fallbackNameBySupabaseId.get(student.supabase_user_id) : null) ||

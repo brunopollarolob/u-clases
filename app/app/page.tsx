@@ -55,9 +55,9 @@ export default async function AppPage() {
             Bienvenido/a a <span className="gradient-text">U-clases</span>
           </h1>
           <p className="mt-2 max-w-3xl text-muted-foreground">
-            Gestiona tutorias, solicitudes y reseñas desde un solo lugar con una vista clara del flujo completo.
+            Gestiona clases particulares, solicitudes y reseñas desde un solo lugar con una vista clara del flujo completo.
             {process.env.NODE_ENV === 'development' ? (
-              <span className="block mt-1 text-sm text-primary">Sesion activa: {userData.email}</span>
+              <span className="block mt-1 text-sm text-primary">Sesión activa: {userData.email}</span>
             ) : null}
           </p>
         </div>
@@ -169,7 +169,7 @@ export default async function AppPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Busca profesores, envia solicitudes y luego monitorea estados y reseñas desde el panel central.
+                  Busca profesores, envía solicitudes y luego monitorea estados y reseñas desde el panel central.
                 </p>
               </CardContent>
             </Card>

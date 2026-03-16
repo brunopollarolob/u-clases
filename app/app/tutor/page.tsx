@@ -37,22 +37,22 @@ export default async function TutorPage() {
         <div className="mb-6 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background px-5 py-6">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Publicacion de perfil
+            Publicación de perfil
           </div>
           <h1 className="flex items-center gap-2 text-3xl font-bold text-foreground">
             <BookOpenCheck className="h-7 w-7 text-primary" />
             Publicar perfil de profesor
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Crea tu perfil para aparecer en las busquedas de estudiantes.
+            Crea tu perfil para aparecer en las búsquedas de estudiantes.
           </p>
         </div>
 
         {hasProfile ? (
           <section className="mb-6 rounded-lg border border-border bg-muted/15 p-4">
-            <h2 className="mb-2 text-xl font-semibold text-foreground">Tu perfil ya esta publicado</h2>
+            <h2 className="mb-2 text-xl font-semibold text-foreground">Tu perfil ya está publicado</h2>
             <p className="mb-4 text-sm text-muted-foreground">
-              Para editar datos, activar/desactivar tu perfil o actualizar ramos, usa la pantalla de gestion de perfil.
+              Para editar datos, activar/desactivar tu perfil o actualizar ramos, usa la pantalla de gestión de perfil.
             </p>
             <div className="flex flex-wrap gap-2">
               <Button asChild>
@@ -78,10 +78,10 @@ export default async function TutorPage() {
         <section className="mt-8 rounded-lg border border-border bg-muted/15 p-4">
           <h2 className="mb-2 flex items-center gap-2 text-xl font-semibold text-foreground">
             <ClipboardList className="h-5 w-5 text-primary" />
-            Gestion de solicitudes
+            Gestión de solicitudes
           </h2>
           <p className="mb-4 text-sm text-muted-foreground">
-            La gestion de aceptacion y completado ahora vive en un panel unico por usuario.
+            La gestión de aceptación y completado ahora vive en un panel único por usuario.
           </p>
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline">

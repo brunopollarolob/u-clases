@@ -208,12 +208,12 @@ export function UserMenuClient({ user, dbUser }: { user: User; dbUser: any }) {
             {signOutPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Cerrando sesion...</span>
+                <span>Cerrando sesión...</span>
               </>
             ) : (
               <>
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>Cerrar sesion</span>
+                <span>Cerrar sesión</span>
               </>
             )}
           </DropdownMenuItem>

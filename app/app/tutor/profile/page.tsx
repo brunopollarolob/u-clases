@@ -34,9 +34,9 @@ export default async function TutorProfileManagementPage() {
       <div className="min-h-screen bg-background">
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="rounded-lg border border-border bg-muted/15 p-5">
-            <h1 className="text-2xl font-bold text-foreground">Gestion de perfil de profesor</h1>
+            <h1 className="text-2xl font-bold text-foreground">Gestión de perfil de profesor</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Aun no tienes un perfil publicado. Primero completa la publicacion de perfil.
+              Aún no tienes un perfil publicado. Primero completa la publicación de perfil.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Button asChild>
@@ -68,14 +68,14 @@ export default async function TutorProfileManagementPage() {
         <div className="mb-6 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background px-5 py-6">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Gestion de perfil
+            Gestión de perfil
           </div>
           <h1 className="flex items-center gap-2 text-3xl font-bold text-foreground">
             <BookOpenCheck className="h-7 w-7 text-primary" />
             Gestionar perfil de profesor
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Edita tus datos, cursos activos y estado de publicacion cuando quieras.
+            Edita tus datos, cursos activos y estado de publicación cuando quieras.
           </p>
         </div>
 
@@ -92,10 +92,10 @@ export default async function TutorProfileManagementPage() {
         <section className="mt-8 rounded-lg border border-border bg-muted/15 p-4">
           <h2 className="mb-2 flex items-center gap-2 text-xl font-semibold text-foreground">
             <ClipboardList className="h-5 w-5 text-primary" />
-            Gestion de solicitudes
+            Gestión de solicitudes
           </h2>
           <p className="mb-4 text-sm text-muted-foreground">
-            Gestiona aceptacion y completado de clases desde el panel central de solicitudes.
+            Gestiona aceptación y completado de clases desde el panel central de solicitudes.
           </p>
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline">

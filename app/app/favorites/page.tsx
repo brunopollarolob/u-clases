@@ -69,7 +69,7 @@ export default async function FavoritesPage() {
 
           <Card>
             <CardContent className="py-10 text-center">
-              <p className="text-foreground">Aun no has guardado profesores.</p>
+              <p className="text-foreground">Aún no has guardado profesores.</p>
               <p className="mt-1 text-sm text-muted-foreground">Explora la seccion de clases y marca perfiles con el corazon.</p>
               <Button asChild className="mt-4 gradient-bg">
                 <Link href="/app/classes">Ir a buscar clases</Link>
