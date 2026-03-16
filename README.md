@@ -38,6 +38,47 @@ pnpm dev
 
 Abre `http://localhost:3000`.
 
+## Estructura general del repositorio
+
+```text
+u-clases/
+|-- app/
+|   |-- (login)/                    # Login, sign-in, sign-up
+|   |-- api/                        # Endpoints (requests, reviews, tutor, user, stripe, etc.)
+|   |-- app/                        # Área protegida principal
+|   |   |-- classes/                # Búsqueda y cards de tutores
+|   |   |-- profile/                # Datos personales + danger zone
+|   |   |-- requests/               # Gestión de solicitudes
+|   |   |-- reviews/                # Reseñas recibidas por tutor
+|   |   |-- tutor/                  # Onboarding y gestión de tutor
+|   |   `-- tutors/                 # Detalle de tutor para estudiantes
+|   |-- auth/                       # Callback de autenticación
+|   |-- privacy/                    # Política de privacidad
+|   `-- terms/                      # Términos y condiciones
+|-- components/
+|   |-- ui/                         # Primitivos UI reutilizables
+|   `-- *.tsx                       # Componentes de landing y app
+|-- lib/
+|   |-- auth/                       # DAL, provider y logging de auth
+|   |-- db/                         # Consultas de sistema/service-role
+|   |-- payments/                   # Código legado de Stripe (no v1)
+|   `-- supabase/                   # Clientes y tipos de Supabase
+|-- supabase/
+|   |-- migrations/                 # Esquema principal y evolución de dominio
+|   `-- optional_migrations/        # Migraciones opcionales heredadas
+|-- middleware.ts                   # Protección de rutas y rate limit
+|-- progress.md                     # Estado de implementación (fuente de verdad)
+|-- gemini.md                       # Contexto operativo para agentes
+|-- SETUP.md                        # Guía de setup del proyecto
+|-- STYLING.md                      # Guía de estilos
+```
+
+## Requisitos
+
+- `Node.js >= 18`
+- `pnpm >= 8`
+- Supabase CLI (para migraciones y tipos)
+
 ## Variables de entorno mínimas
 
 ```env
@@ -51,7 +92,6 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 - Setup detallado: `SETUP.md`
 - Estado de implementación: `progress.md`
-- Guía técnica para contributors: `README_TECHNICAL.md`
 - Contexto de agentes: `gemini.md`
 - Auth DAL: `lib/auth/README.md`
 - Data layer: `lib/db/README.md`
@@ -61,8 +101,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 Este proyecto partió desde el template `saas-template-for-ai-lite` de Teemu Sormunen.
 
 - Base: [TeemuSo/saas-template-for-ai-lite](https://github.com/TeemuSo/saas-template-for-ai-lite)
-- Desarrollo principal asistido con `Antigravity` usando `Gemini 3.1 High`
-- Desarrollo principal asistido con `GitHub Copilot` usando `GPT-5.3-Codex`
+- Desarrollo principal utilizando `Antigravity` con `Gemini 3.1 High`
 
 ## Licencia
 
