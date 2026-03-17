@@ -6,6 +6,7 @@ import { BookOpen, ArrowRight, GraduationCap, Search } from 'lucide-react';
 import Link from 'next/link';
 import { User } from '@/lib/supabase/types';
 import { UClasesLogo } from '@/components/uclases-logo';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface HeroSectionProps {
   user: User | null;
@@ -15,6 +16,7 @@ interface HeroSectionProps {
     course: string;
     rating: string;
     reviews: number;
+    avatarUrl?: string | null;
   }>;
 }
 
@@ -130,11 +132,14 @@ export function HeroSection({ user, topTutors = [] }: HeroSectionProps) {
               {/* Preview de tarjetas de tutores */}
               <div className="p-5 space-y-3">
                 {topTutors.map((tutor) => (
-                  <div key={tutor.name} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors">
+                  <div key={`${tutor.name}-${tutor.course}`} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full gradient-bg flex items-center justify-center text-primary-foreground font-bold text-sm">
-                        {tutor.name[0]}
-                      </div>
+                      <Avatar className="h-9 w-9 border border-border/60">
+                        <AvatarImage src={tutor.avatarUrl || undefined} alt={tutor.name} />
+                        <AvatarFallback className="gradient-bg text-primary-foreground font-bold text-sm">
+                          {tutor.name[0]}
+                        </AvatarFallback>
+                      </Avatar>
                       <div>
                         <p className="font-semibold text-foreground text-sm">{tutor.name}</p>
                         <p className="text-xs text-muted-foreground">{tutor.course}</p>

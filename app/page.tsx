@@ -20,7 +20,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const resolvedSearchParams = await searchParams;
   const supabase = await createServiceClient();
 
-  let topTutors: Array<{ name: string; course: string; rating: string; reviews: number }> = [];
+  let topTutors: Array<{ name: string; course: string; rating: string; reviews: number; avatarUrl: string | null }> = [];
 
   const { data: tutorProfilesData, error: tutorProfilesError } = await supabase
     .from('tutor_profiles')
@@ -34,7 +34,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
     if (profileIds.length > 0) {
       const [usersResult, coursesResult, tutorCoursesResult, reviewsResult] = await Promise.all([
-        supabase.from('users').select('id, full_name').in('id', userIds),
+        supabase.from('users').select('id, full_name, avatar_url').in('id', userIds),
         supabase.from('courses').select('id, name'),
         supabase.from('tutor_courses').select('tutor_profile_id, course_id').in('tutor_profile_id', profileIds),
         supabase
@@ -44,7 +44,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       ]);
 
       if (!usersResult.error && !coursesResult.error && !tutorCoursesResult.error && !reviewsResult.error) {
-        const users = (usersResult.data || []) as Pick<UserRow, 'id' | 'full_name'>[];
+        const users = (usersResult.data || []) as Pick<UserRow, 'id' | 'full_name' | 'avatar_url'>[];
         const courses = (coursesResult.data || []) as Pick<CourseRow, 'id' | 'name'>[];
         const tutorCourses = (tutorCoursesResult.data || []) as Pick<TutorCourseRow, 'tutor_profile_id' | 'course_id'>[];
         const reviews = (reviewsResult.data || []) as Pick<ReviewRow, 'tutor_id' | 'course_id' | 'rating'>[];
@@ -94,6 +94,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
 
             return {
               name: userById.get(profile.user_id)?.full_name || 'Profesor/a U-clases',
+              avatarUrl: userById.get(profile.user_id)?.avatar_url || null,
               course: course ? `${course.id} · ${course.name}` : 'Ramos de Plan Común',
               rating: averageRating > 0 ? averageRating.toFixed(1) : 'Nuevo',
               reviews: reviewsCount,
@@ -107,16 +108,16 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
             return b.reviews - a.reviews;
           })
           .slice(0, 3)
-          .map(({ name, course, rating, reviews }) => ({ name, course, rating, reviews }));
+          .map(({ name, course, rating, reviews, avatarUrl }) => ({ name, course, rating, reviews, avatarUrl }));
       }
     }
   }
 
   if (topTutors.length === 0) {
     topTutors = [
-      { name: 'Profe destacado', course: 'MA1002 · Cálculo', rating: '5.0', reviews: 1 },
-      { name: 'Profe recomendado', course: 'FI1000 · Física Clásica', rating: '4.9', reviews: 1 },
-      { name: 'Profe activo', course: 'MA1102 · Álgebra Lineal', rating: '4.8', reviews: 1 },
+      { name: 'Profe destacado', course: 'MA1002 · Cálculo', rating: '5.0', reviews: 1, avatarUrl: null },
+      { name: 'Profe recomendado', course: 'FI1000 · Física Clásica', rating: '4.9', reviews: 1, avatarUrl: null },
+      { name: 'Profe activo', course: 'MA1102 · Álgebra Lineal', rating: '4.8', reviews: 1, avatarUrl: null },
     ];
   }
   
