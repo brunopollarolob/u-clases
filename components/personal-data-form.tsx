@@ -131,7 +131,7 @@ export function PersonalDataForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Correo electronico</Label>
+          <Label htmlFor="email">Correo electrónico</Label>
           <Input
             id="email"
             type="email"
@@ -142,7 +142,7 @@ export function PersonalDataForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="phone">Telefono</Label>
+          <Label htmlFor="phone">Teléfono</Label>
           <Input
             id="phone"
             value={phone}
@@ -184,7 +184,7 @@ export function PersonalDataForm({
 
         {!isGraduated ? (
           <div className="space-y-2 sm:col-span-2">
-            <Label htmlFor="academicYear">Año academico actual</Label>
+            <Label htmlFor="academicYear">Año académico actual</Label>
             <Input
               id="academicYear"
               type="number"

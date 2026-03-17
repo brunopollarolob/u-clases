@@ -43,12 +43,12 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
 
     if (isSignup && signupStep === 1) {
       if (!formData.email.trim() || !formData.password.trim()) {
-        setError('Debes indicar correo y contrasena para continuar.');
+        setError('Debes indicar correo y contraseña para continuar.');
         return;
       }
 
       if (formData.password.length < config.auth.passwordMinLength) {
-        setError(`La contrasena debe tener al menos ${config.auth.passwordMinLength} caracteres.`);
+        setError(`La contraseña debe tener al menos ${config.auth.passwordMinLength} caracteres.`);
         return;
       }
 
@@ -61,7 +61,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
 
     try {
       if (isSignup && !formData.isGraduated && !formData.academicYear.trim()) {
-        setError('Debes indicar tu ano academico si aun no estas titulado/a.');
+        setError('Debes indicar tu año académico si aún no estás titulado/a.');
         setPending(false);
         return;
       }
@@ -89,7 +89,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
           });
 
       if (!result.success) {
-        setError(result.error || 'Ocurrio un error.');
+        setError(result.error || 'Ocurrió un error.');
         return;
       }
 
@@ -100,7 +100,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
 
       window.location.href = redirect ? `/${redirect}` : '/app';
     } catch {
-      setError('Ocurrio un error inesperado.');
+      setError('Ocurrió un error inesperado.');
     } finally {
       setPending(false);
     }
@@ -121,7 +121,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
         setGoogleLoading(false);
       }
     } catch {
-      setError('Ocurrio un error inesperado.');
+      setError('Ocurrió un error inesperado.');
       setGoogleLoading(false);
     }
   };
@@ -154,7 +154,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             <div className="space-y-4 animate-fade-in delay-300">
               <div className="flex items-center">
                 <div className="mr-3 h-2 w-2 rounded-full bg-primary-foreground" />
-                <span className="text-primary-foreground/80">Busqueda por ramos</span>
+                <span className="text-primary-foreground/80">Búsqueda por ramos</span>
               </div>
               <div className="flex items-center">
                 <div className="mr-3 h-2 w-2 rounded-full bg-primary-foreground" />
@@ -195,9 +195,9 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                   </h1>
                   <p className="text-sm text-gray-600">
                     {mode === 'signin'
-                      ? 'Inicia sesión para continuar a U-clases'
+                      ? 'Inicia sesión para continuar en U-clases'
                       : signupStep === 1
-                        ? 'Paso 1 de 2: acceso de cuenta'
+                        ? 'Paso 1 de 2: acceso a la cuenta'
                         : 'Paso 2 de 2: completa tu perfil'}
                   </p>
                 </div>
@@ -222,7 +222,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                       onClick={() => setSignupStep(1)}
                       className="mt-1 text-xs font-medium text-primary hover:underline"
                     >
-                      Editar correo o contrasena
+                      Editar correo o contraseña
                     </button>
                   </div>
 
@@ -307,7 +307,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
               ) : (
                 <>
                   <div>
-                    <Label htmlFor="email" className="font-medium text-gray-700">Correo electronico</Label>
+                    <Label htmlFor="email" className="font-medium text-gray-700">Correo electrónico</Label>
                     <Input
                       id="email"
                       type="email"
@@ -320,7 +320,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                   </div>
 
                   <div>
-                    <Label htmlFor="password" className="font-medium text-gray-700">Contrasena</Label>
+                    <Label htmlFor="password" className="font-medium text-gray-700">Contraseña</Label>
                     <div className="relative mt-1">
                       <Input
                         id="password"
@@ -329,7 +329,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         required
                         className="h-12 rounded-xl border-gray-200 pr-12 hover-scale focus:border-primary focus:ring-primary"
-                        placeholder="Ingresa tu contrasena"
+                        placeholder="Ingresa tu contraseña"
                       />
                       <button
                         type="button"
@@ -341,7 +341,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                     </div>
                     {isSignup ? (
                       <p className="mt-1 text-xs text-muted-foreground">
-                        Debe tener al menos {config.auth.passwordMinLength} caracteres, incluyendo mayuscula, minuscula, numero y caracter especial (!@#$%^&*)
+                        Debe tener al menos {config.auth.passwordMinLength} caracteres, incluyendo mayúscula, minúscula, número y carácter especial (!@#$%^&*)
                       </p>
                     ) : null}
                   </div>
@@ -403,7 +403,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                       <div className="w-full border-t border-gray-200" />
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="px-4 text-gray-500 gradient-bg-subtle">o continua con</span>
+                      <span className="px-4 text-gray-500 gradient-bg-subtle">o continúa con</span>
                     </div>
                   </div>
                 </div>
@@ -456,7 +456,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
 
             <div className="mt-6 animate-fade-in delay-600 text-center">
               <p className="text-sm text-muted-foreground">
-                {mode === 'signin' ? 'No tienes cuenta?' : 'Ya tienes cuenta?'}{' '}
+                {mode === 'signin' ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}{' '}
                 <Link
                   href={mode === 'signin' ? '/sign-up' : '/sign-in'}
                   className="font-semibold text-primary transition-opacity hover:opacity-80 hover-scale"
