@@ -23,6 +23,31 @@ interface HeroSectionProps {
 export function HeroSection({ user, topTutors = [] }: HeroSectionProps) {
   const [mounted, setMounted] = useState(false);
 
+  const getRankAvatarStyles = (index: number) => {
+    if (index === 0) {
+      return {
+        ring: 'ring-2 ring-amber-400/70',
+        badge: 'bg-amber-100 text-amber-800 border-amber-300/70',
+      };
+    }
+    if (index === 1) {
+      return {
+        ring: 'ring-2 ring-slate-300/80',
+        badge: 'bg-slate-100 text-slate-700 border-slate-300/70',
+      };
+    }
+    if (index === 2) {
+      return {
+        ring: 'ring-2 ring-orange-300/80',
+        badge: 'bg-orange-100 text-orange-800 border-orange-300/70',
+      };
+    }
+    return {
+      ring: 'ring-1 ring-border',
+      badge: 'bg-muted text-muted-foreground border-border',
+    };
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -131,26 +156,34 @@ export function HeroSection({ user, topTutors = [] }: HeroSectionProps) {
 
               {/* Preview de tarjetas de tutores */}
               <div className="p-5 space-y-3">
-                {topTutors.map((tutor) => (
-                  <div key={`${tutor.name}-${tutor.course}`} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-9 w-9 border border-border/60">
-                        <AvatarImage src={tutor.avatarUrl || undefined} alt={tutor.name} />
-                        <AvatarFallback className="gradient-bg text-primary-foreground font-bold text-sm">
-                          {tutor.name[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold text-foreground text-sm">{tutor.name}</p>
-                        <p className="text-xs text-muted-foreground">{tutor.course}</p>
+                {topTutors.map((tutor, index) => {
+                  const rankStyles = getRankAvatarStyles(index);
+                  return (
+                    <div key={`${tutor.name}-${tutor.course}`} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <Avatar className={`h-9 w-9 border border-background/80 ${rankStyles.ring}`}>
+                          <AvatarImage src={tutor.avatarUrl || undefined} alt={tutor.name} />
+                          <AvatarFallback className="gradient-bg text-primary-foreground font-bold text-sm">
+                            {tutor.name[0]}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-foreground text-sm">{tutor.name}</p>
+                            <span className={`inline-flex h-5 min-w-5 items-center justify-center rounded-full border px-1 text-[10px] font-bold ${rankStyles.badge}`}>
+                              #{index + 1}
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground">{tutor.course}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-bold text-foreground">⭐ {tutor.rating}</p>
+                        <p className="text-xs text-muted-foreground">{tutor.reviews} reseñas</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-bold text-foreground">⭐ {tutor.rating}</p>
-                      <p className="text-xs text-muted-foreground">{tutor.reviews} reseñas</p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="px-5 pb-5">
