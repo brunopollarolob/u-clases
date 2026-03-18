@@ -106,7 +106,7 @@ export function FeaturesSection() {
             style={{ transitionDuration: 'var(--duration-slow)' }}
           >
             <p className="mb-3 inline-flex items-center rounded-full border border-primary/25 bg-background/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
-              De foro suelto a ranking real
+              De foro suelto a plataforma centralizada
             </p>
 
             <h3 className="text-base md:text-lg font-semibold text-foreground mb-3">

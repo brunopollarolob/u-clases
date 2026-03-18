@@ -219,7 +219,7 @@ export function TutorProfileForm({
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setErrorMessage('La foto supera el maximo permitido de 5 MB.');
+      setErrorMessage('La foto supera el máximo permitido de 5 MB.');
       event.target.value = '';
       return;
     }
@@ -255,11 +255,11 @@ export function TutorProfileForm({
   return (
     <Card className="border-primary/20">
       <CardHeader>
-        <CardTitle>{hasExistingProfile ? 'Panel de edicion del perfil de profesor' : 'Publicar perfil de profesor'}</CardTitle>
+        <CardTitle>{hasExistingProfile ? 'Panel de edición del perfil de profesor' : 'Publicar perfil de profesor'}</CardTitle>
         <CardDescription>
           {hasExistingProfile
-            ? 'Edita tus datos, cursos y estado de publicacion en cualquier momento.'
-            : 'Completa tus datos para aparecer en las busquedas de alumnos.'}
+            ? 'Edita tus datos, cursos y estado de publicación en cualquier momento.'
+            : 'Completa tus datos para aparecer en las búsquedas de alumnos.'}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -267,7 +267,7 @@ export function TutorProfileForm({
           <div className="rounded-md border border-border p-4">
             <p className="text-sm font-medium text-foreground">Foto de perfil del profesor</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Se mostrara en la pestaña de cursos. Formatos de imagen, maximo 5 MB.
+              Se mostrara en la pestaña de cursos. Máximo 5 MB.
             </p>
             <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Avatar className="h-20 w-20 border border-border">
@@ -303,13 +303,13 @@ export function TutorProfileForm({
                 id="fullName"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Ej: Camila Perez"
+                placeholder="Ej: Camila Pérez"
                 maxLength={120}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="classDurationMinutes">Duracion de clase (minutos)</Label>
+              <Label htmlFor="classDurationMinutes">Duración de clase (minutos)</Label>
               <select
                 id="classDurationMinutes"
                 value={classDurationMinutes}
@@ -355,13 +355,13 @@ export function TutorProfileForm({
                 value={summaryShort}
                 onChange={(e) => setSummaryShort(e.target.value)}
                 maxLength={220}
-                placeholder="Ej: Tutor de calculo y algebra con clases enfocadas en controles y certamenes."
+                placeholder="Ej: Auxiliar de intro al cálculo con clases enfocadas en controles."
               />
-              <p className="text-xs text-muted-foreground">Este texto corto aparece en la tarjeta de busqueda.</p>
+              <p className="text-xs text-muted-foreground">Este texto corto aparece en la tarjeta de búsqueda.</p>
             </div>
 
             <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="summaryLong">Descripcion detallada (solo en perfil del profesor)</Label>
+              <Label htmlFor="summaryLong">Descripción detallada (solo en perfil del profesor)</Label>
               <textarea
                 id="summaryLong"
                 value={summaryLong}
@@ -369,7 +369,7 @@ export function TutorProfileForm({
                 maxLength={2500}
                 rows={7}
                 className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none transition-[color,box-shadow] duration-[var(--duration-fast)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-                placeholder="Cuenta tu experiencia, metodologia, que cubres en las clases y como preparas a tus alumnos."
+                placeholder="Cuenta tu experiencia, metodología, que cubres en las clases y cómo preparas a tus alumnos."
               />
             </div>
 
