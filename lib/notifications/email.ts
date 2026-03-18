@@ -2,6 +2,7 @@ import 'server-only';
 
 import { config } from '@/lib/config';
 import { createServiceClient } from '@/lib/supabase/server';
+import { Resend } from 'resend';
 
 type Recipient = string | string[];
 
@@ -196,6 +197,30 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
     };
   }
 
+  if (resendApiKey === 're_xxxxxxxxx') {
+    const errorMessage = 'Replace re_xxxxxxxxx with your real RESEND_API_KEY';
+
+    await upsertNotificationEvent({
+      eventKey,
+      eventType,
+      recipientEmail: originalRecipients.join(', '),
+      effectiveRecipientEmail: effectiveRecipients.join(', '),
+      status: 'failed',
+      provider,
+      errorMessage,
+      payload: {
+        ...(input.metadata || {}),
+        subject: input.subject,
+      },
+      attemptCount,
+    });
+
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
+
   try {
     const redirectNotice = redirectTo
       ? `<p style="font-size:12px;color:#6b7280;margin:0 0 10px;">[test mode] Intended recipients: ${originalRecipients.join(', ')}</p>`
@@ -206,26 +231,18 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
       ? `[test mode] Intended recipients: ${originalRecipients.join(', ')}\n\n${input.text || ''}`.trim()
       : input.text;
 
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from,
-        to: effectiveRecipients,
-        subject: input.subject,
-        html: htmlWithRedirectNotice,
-        text: textWithRedirectNotice,
-        reply_to: replyTo,
-      }),
+    const resend = new Resend(resendApiKey);
+    const { data, error } = await resend.emails.send({
+      from,
+      to: effectiveRecipients,
+      subject: input.subject,
+      html: htmlWithRedirectNotice,
+      text: textWithRedirectNotice,
+      replyTo,
     });
 
-    const payload = (await response.json().catch(() => null)) as { id?: string; message?: string } | null;
-
-    if (!response.ok) {
-      const errorMessage = payload?.message || `Resend error (${response.status})`;
+    if (error) {
+      const errorMessage = error.message || 'Resend error';
 
       await upsertNotificationEvent({
         eventKey,
@@ -255,7 +272,7 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
       effectiveRecipientEmail: effectiveRecipients.join(', '),
       status: 'sent',
       provider,
-      providerMessageId: payload?.id || null,
+      providerMessageId: data?.id || null,
       payload: {
         ...(input.metadata || {}),
         subject: input.subject,
@@ -266,7 +283,7 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
 
     return {
       success: true,
-      providerMessageId: payload?.id,
+      providerMessageId: data?.id,
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown email error';

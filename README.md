@@ -96,6 +96,8 @@ EMAIL_REDIRECT_TO="brunopollarolo.bp@gmail.com"
 RESEND_API_KEY=
 ```
 
+Si usas el placeholder `re_xxxxxxxxx`, reemplazalo por tu API key real de Resend.
+
 `EMAIL_REDIRECT_TO` fuerza que todos los correos se envien a un inbox de pruebas.
 Cuando tengas dominio propio, vacia ese valor para enviar al destinatario real.
 
