@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getApiUser } from '@/lib/auth/dal';
 import { createServiceClient } from '@/lib/supabase/server';
+import { config } from '@/lib/config';
+import { sendEmail } from '@/lib/notifications/email';
+import { buildNewClassRequestEmail } from '@/lib/notifications/class-requests';
 
 const createClassRequestSchema = z.object({
   tutorProfileId: z.number().int().positive(),
@@ -29,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     const { data: profile, error: profileError } = await supabase
       .from('tutor_profiles')
-      .select('id, is_active')
+      .select('id, is_active, user_id')
       .eq('id', payload.tutorProfileId)
       .maybeSingle();
 
@@ -81,6 +84,62 @@ export async function POST(request: NextRequest) {
     if (insertError || !classRequest) {
       console.error('Error creating class request:', insertError);
       return NextResponse.json({ error: 'No se pudo crear la solicitud' }, { status: 500 });
+    }
+
+    // Best-effort email notification to tutor. Request creation should not fail if email fails.
+    try {
+      const [courseResult, tutorUserResult] = await Promise.all([
+        supabase
+          .from('courses')
+          .select('id, name')
+          .eq('id', payload.courseId)
+          .maybeSingle(),
+        supabase
+          .from('users')
+          .select('full_name, supabase_user_id')
+          .eq('id', profile.user_id)
+          .maybeSingle(),
+      ]);
+
+      const tutorSupabaseUserId = tutorUserResult.data?.supabase_user_id;
+      const tutorName = tutorUserResult.data?.full_name || 'Profesor/a U-clases';
+      const studentName = userData.dbUser.full_name || 'Un estudiante';
+      const courseLabel = courseResult.data
+        ? `${courseResult.data.id} · ${courseResult.data.name}`
+        : payload.courseId;
+
+      if (tutorSupabaseUserId) {
+        const { data: authTutorData, error: authTutorError } = await supabase.auth.admin.getUserById(tutorSupabaseUserId);
+
+        if (authTutorError) {
+          console.error('Could not load tutor auth user for email notification:', authTutorError);
+        } else {
+          const tutorEmail = authTutorData.user?.email;
+
+          if (tutorEmail) {
+            const emailPayload = buildNewClassRequestEmail({
+              tutorName,
+              studentName,
+              courseLabel,
+              studentNote: payload.studentNote,
+              requestsUrl: `${config.app.url}/app/requests`,
+            });
+
+            const sendResult = await sendEmail({
+              to: tutorEmail,
+              subject: emailPayload.subject,
+              html: emailPayload.html,
+              text: emailPayload.text,
+            });
+
+            if (!sendResult.success) {
+              console.error('Failed to send tutor notification email:', sendResult.error);
+            }
+          }
+        }
+      }
+    } catch (notificationError) {
+      console.error('Unexpected error while sending tutor notification email:', notificationError);
     }
 
     return NextResponse.json({ success: true, request: classRequest });

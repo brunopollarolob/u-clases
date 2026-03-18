@@ -86,7 +86,18 @@ NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Email notifications (step 1 base)
+EMAIL_NOTIFICATIONS_ENABLED=false
+EMAIL_PROVIDER=resend
+EMAIL_FROM="U-clases <onboarding@resend.dev>"
+EMAIL_REPLY_TO="brunopollarolo.bp@gmail.com"
+EMAIL_REDIRECT_TO="brunopollarolo.bp@gmail.com"
+RESEND_API_KEY=
 ```
+
+`EMAIL_REDIRECT_TO` fuerza que todos los correos se envien a un inbox de pruebas.
+Cuando tengas dominio propio, vacia ese valor para enviar al destinatario real.
 
 ## Documentación
 

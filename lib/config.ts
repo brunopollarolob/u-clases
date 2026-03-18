@@ -49,6 +49,20 @@ export const config = {
     // Legacy support - keep for backward compatibility
     emailRedirectTo: '/auth/callback',
   },
+
+  // Email notifications (used by lib/notifications/email.ts)
+  notifications: {
+    email: {
+      enabled: process.env.EMAIL_NOTIFICATIONS_ENABLED === 'true',
+      provider: process.env.EMAIL_PROVIDER || 'resend',
+      // Resend's onboarding sender works while you do not have your own domain.
+      from: process.env.EMAIL_FROM || 'U-clases <onboarding@resend.dev>',
+      replyTo: process.env.EMAIL_REPLY_TO || 'brunopollarolo.bp@gmail.com',
+      // Temporary catch-all inbox for testing email flows.
+      redirectTo: process.env.EMAIL_REDIRECT_TO || 'brunopollarolo.bp@gmail.com',
+      resendApiKey: process.env.RESEND_API_KEY || '',
+    },
+  },
   supabase: {
     projectRef: process.env.NEXT_PUBLIC_SUPABASE_URL?.split('.')[0].split('//')[1] || 'your-project-ref',
     supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project-ref.supabase.co',
