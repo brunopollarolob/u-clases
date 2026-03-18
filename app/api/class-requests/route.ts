@@ -130,6 +130,14 @@ export async function POST(request: NextRequest) {
               subject: emailPayload.subject,
               html: emailPayload.html,
               text: emailPayload.text,
+              idempotencyKey: `class-request:${classRequest.id}:created:tutor`,
+              eventType: 'class_request.created.tutor_notified',
+              metadata: {
+                requestId: classRequest.id,
+                tutorProfileId: payload.tutorProfileId,
+                courseId: payload.courseId,
+                actorRole: 'student',
+              },
             });
 
             if (!sendResult.success) {

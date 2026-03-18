@@ -181,6 +181,15 @@ export async function PATCH(
                 subject: emailPayload.subject,
                 html: emailPayload.html,
                 text: emailPayload.text,
+                idempotencyKey: `class-request:${updatedRequest.id}:status:${status}:recipient:${recipientUserId}`,
+                eventType: 'class_request.status_changed.user_notified',
+                metadata: {
+                  requestId: updatedRequest.id,
+                  status,
+                  action: payload.action,
+                  recipientUserId,
+                  actorUserId: userData.dbUser.id,
+                },
               });
 
               if (!sendResult.success) {
