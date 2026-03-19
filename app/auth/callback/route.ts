@@ -9,13 +9,27 @@ export async function GET(request: Request) {
   const error_description = searchParams.get('error_description');
   const next = searchParams.get('next') ?? '/app';
 
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const forwardedProto = request.headers.get('x-forwarded-proto') || 'https';
+  const configuredBase = config.app.url.replace(/\/$/, '');
+  const requestOrigin = origin.replace(/\/$/, '');
+  const isLocalOrigin = requestOrigin.includes('localhost') || requestOrigin.includes('127.0.0.1');
+
+  const appBaseUrl = forwardedHost
+    ? `${forwardedProto}://${forwardedHost}`
+    : config.app.env === 'production' && isLocalOrigin
+      ? configuredBase
+      : requestOrigin;
+
+  const safeNextPath = next.startsWith('/') ? next : '/app';
+
   // Handle OAuth errors
   if (error) {
     console.error('OAuth error:', error, error_description);
     const errorMessage = encodeURIComponent(
       error_description || 'Authentication failed. Please try again.'
     );
-    return NextResponse.redirect(`${origin}${config.auth.paths.signIn}?error=${errorMessage}`);
+    return NextResponse.redirect(`${appBaseUrl}${config.auth.paths.signIn}?error=${errorMessage}`);
   }
 
   if (code) {
@@ -96,58 +110,22 @@ export async function GET(request: Request) {
           console.error('Unexpected error syncing profile metadata:', syncUnexpectedError);
         }
 
-        let destination = next;
+        const destination = safeNextPath;
 
-        try {
-          const { data: profileData, error: profileError } = await supabase
-            .from('users')
-            .select('phone, is_graduated, academic_year, specialization')
-            .eq('supabase_user_id', data.user.id)
-            .maybeSingle();
-
-          const profile = profileData as {
-            phone: string | null;
-            is_graduated: boolean;
-            academic_year: number | null;
-            specialization: string | null;
-          } | null;
-
-          if (!profileError && profile) {
-            const missingPhone = !profile.phone || profile.phone.trim().length === 0;
-            const missingAcademic = !profile.is_graduated && profile.academic_year === null;
-            const missingSpecialization = !profile.specialization || profile.specialization.trim().length === 0;
-
-            if (missingPhone || missingAcademic || missingSpecialization) {
-              destination = '/app/profile?complete=1';
-            }
-          }
-        } catch (profileCheckError) {
-          console.error('Error checking profile completeness after auth callback:', profileCheckError);
-        }
-
-        const forwardedHost = request.headers.get('x-forwarded-host');
-        const isLocalEnv = config.app.env === 'development';
-        
-        if (isLocalEnv) {
-          return NextResponse.redirect(`${origin}${destination}`);
-        } else if (forwardedHost) {
-          return NextResponse.redirect(`https://${forwardedHost}${destination}`);
-        } else {
-          return NextResponse.redirect(`${origin}${destination}`);
-        }
+        return NextResponse.redirect(`${appBaseUrl}${destination}`);
       } else {
         console.error('Session exchange error:', error);
         const errorMessage = encodeURIComponent('Failed to complete authentication. Please try again.');
-        return NextResponse.redirect(`${origin}${config.auth.paths.signIn}?error=${errorMessage}`);
+        return NextResponse.redirect(`${appBaseUrl}${config.auth.paths.signIn}?error=${errorMessage}`);
       }
     } catch (err) {
       console.error('Unexpected error during auth callback:', err);
       const errorMessage = encodeURIComponent('An unexpected error occurred. Please try again.');
-      return NextResponse.redirect(`${origin}${config.auth.paths.signIn}?error=${errorMessage}`);
+      return NextResponse.redirect(`${appBaseUrl}${config.auth.paths.signIn}?error=${errorMessage}`);
     }
   }
 
   // No code and no error - invalid callback
   const errorMessage = encodeURIComponent('Invalid authentication callback. Please try signing in again.');
-  return NextResponse.redirect(`${origin}${config.auth.paths.signIn}?error=${errorMessage}`);
+  return NextResponse.redirect(`${appBaseUrl}${config.auth.paths.signIn}?error=${errorMessage}`);
 } 
