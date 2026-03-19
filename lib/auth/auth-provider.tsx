@@ -195,6 +195,8 @@ export function AuthProvider({
 
       const normalizedPayload = result.data;
 
+      const siteOrigin = window.location.origin || config.app.url;
+
       const { data: authData, error } = await supabase.auth.signUp({
         email: normalizedPayload.email,
         password: normalizedPayload.password,
@@ -206,7 +208,7 @@ export function AuthProvider({
             is_graduated: normalizedPayload.isGraduated,
             specialization: normalizedPayload.specialization,
           },
-          emailRedirectTo: `${config.app.url}${config.auth.paths.callback}`,
+          emailRedirectTo: `${siteOrigin}${config.auth.paths.callback}`,
         }
       });
 
