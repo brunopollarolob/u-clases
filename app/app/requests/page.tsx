@@ -14,9 +14,9 @@ type ClassRequestRow = Tables<'class_requests'>;
 type ReviewRow = Tables<'reviews'>;
 
 interface RequestsPageProps {
-  searchParams?: {
+  searchParams?: Promise<{
     created?: string;
-  };
+  }>;
 }
 
 function extractAuthDisplayName(metadata: unknown): string | null {
@@ -44,6 +44,7 @@ export const dynamic = 'force-dynamic';
 export default async function RequestsPage({ searchParams }: RequestsPageProps) {
   const userData = await getUserWithAccess();
   const supabase = await createServiceClient();
+  const resolvedSearchParams = await searchParams;
 
   // Opening this screen marks request-related notifications as seen.
   await supabase
@@ -51,7 +52,7 @@ export default async function RequestsPage({ searchParams }: RequestsPageProps) 
     .update({ request_notifications_seen_at: new Date().toISOString() })
     .eq('id', userData.dbUser.id);
 
-  const initialNotice = searchParams?.created === '1' ? 'Solicitud creada. Ahora puedes seguir el estado desde aquí.' : '';
+  const initialNotice = resolvedSearchParams?.created === '1' ? 'Solicitud creada. Ahora puedes seguir el estado desde aquí.' : '';
 
   const studentRequestsQuery = await supabase
     .from('class_requests')

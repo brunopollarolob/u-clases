@@ -31,11 +31,11 @@ type ClassRequestRow = Tables<'class_requests'>;
 type FavoriteTutorRow = Tables<'favorite_tutors'>;
 
 interface ClassesPageProps {
-  searchParams?: {
+  searchParams?: Promise<{
     course?: string;
     maxRate?: string;
     sort?: string;
-  };
+  }>;
 }
 
 type TutorSortMode = 'popular' | 'rating' | 'price';
@@ -98,10 +98,11 @@ export const dynamic = 'force-dynamic';
 export default async function ClassesPage({ searchParams }: ClassesPageProps) {
   const userData = await getUserWithAccess();
   const supabase = await createServiceClient();
+  const resolvedSearchParams = await searchParams;
 
-  const selectedCourse = searchParams?.course?.trim() || '';
-  const maxRate = parseMaxRate(searchParams?.maxRate);
-  const sortMode = parseSortMode(searchParams?.sort);
+  const selectedCourse = resolvedSearchParams?.course?.trim() || '';
+  const maxRate = parseMaxRate(resolvedSearchParams?.maxRate);
+  const sortMode = parseSortMode(resolvedSearchParams?.sort);
 
   const { data: coursesData, error: coursesError } = await supabase
     .from('courses')
@@ -451,7 +452,7 @@ export default async function ClassesPage({ searchParams }: ClassesPageProps) {
                   type="number"
                   min={1000}
                   step={500}
-                  defaultValue={searchParams?.maxRate || ''}
+                  defaultValue={resolvedSearchParams?.maxRate || ''}
                   placeholder="20000"
                 />
               </div>

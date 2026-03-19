@@ -57,9 +57,9 @@ export const config = {
       provider: process.env.EMAIL_PROVIDER || 'resend',
       // Resend's onboarding sender works while you do not have your own domain.
       from: process.env.EMAIL_FROM || 'U-clases <onboarding@resend.dev>',
-      replyTo: process.env.EMAIL_REPLY_TO || 'brunopollarolo.bp@gmail.com',
-      // Temporary catch-all inbox for testing email flows.
-      redirectTo: process.env.EMAIL_REDIRECT_TO || 'brunopollarolo.bp@gmail.com',
+      replyTo: process.env.EMAIL_REPLY_TO || '',
+      // Optional catch-all inbox for testing. Keep empty in production.
+      redirectTo: process.env.EMAIL_REDIRECT_TO || '',
       resendApiKey: process.env.RESEND_API_KEY || '',
     },
   },

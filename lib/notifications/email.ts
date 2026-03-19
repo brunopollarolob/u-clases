@@ -238,7 +238,7 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
       subject: input.subject,
       html: htmlWithRedirectNotice,
       text: textWithRedirectNotice,
-      replyTo,
+      ...(replyTo ? { replyTo } : {}),
     });
 
     if (error) {
