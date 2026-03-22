@@ -17,51 +17,51 @@ export default function TermsOfServicePage() {
 
         <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 mb-8 text-amber-900">
           <p className="text-sm">
-            Este documento es una version base de terminos y condiciones para u-clases y puede requerir
-            revision legal profesional antes de su version final.
+            Este documento es una versión base de términos y condiciones para u-clases y puede requerir
+            revisión legal profesional antes de su versión final.
           </p>
         </div>
 
         <article className="prose prose-neutral max-w-none">
-          <h1 className="text-4xl font-bold text-foreground mb-8">Terminos y Condiciones</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-8">Términos y Condiciones</h1>
 
           <p className="text-muted-foreground mb-8">
-            <strong>Ultima actualizacion:</strong> {lastUpdated}
+            <strong>Última actualización:</strong> {lastUpdated}
           </p>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">1. Aceptacion de los terminos</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">1. Aceptación de los términos</h2>
             <p className="text-foreground/90">
-              Al registrarte o utilizar u-clases, aceptas estos Terminos y Condiciones y nuestra Politica de
-              Privacidad. Si no estas de acuerdo, no debes utilizar la plataforma.
+              Al registrarte o utilizar u-clases, aceptas estos Términos y Condiciones y nuestra Política de
+              Privacidad. Si no estás de acuerdo, no debes utilizar la plataforma.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">2. Descripcion del servicio</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">2. Descripción del servicio</h2>
             <p className="text-foreground/90 mb-4">
-              u-clases es una plataforma de intermediacion para la comunidad de la FCFM que permite:
+              u-clases es una plataforma de intermediación para la comunidad de la FCFM que permite:
             </p>
             <ul className="list-disc pl-6 text-foreground/90 space-y-1">
               <li>Publicar perfiles de tutor y ramos ofrecidos.</li>
               <li>Buscar tutores por ramo y criterios disponibles.</li>
               <li>Gestionar solicitudes de clase entre estudiantes y tutores.</li>
-              <li>Publicar y visualizar resenas una vez completada una clase.</li>
+              <li>Publicar y visualizar reseñas una vez completada una clase.</li>
             </ul>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">3. Alcance actual (v1)</h2>
             <p className="text-foreground/90">
-              El alcance principal de la version actual es gestion de clases (tutores, estudiantes,
-              solicitudes, resenas y notificaciones). Los pagos no forman parte del flujo critico de v1.
+              El alcance principal de la versión actual es gestión de clases (tutores, estudiantes,
+              solicitudes, reseñas y notificaciones). Los pagos no forman parte del flujo crítico de v1.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">4. Registro y cuentas</h2>
             <ul className="list-disc pl-6 text-foreground/90 space-y-1">
-              <li>Debes entregar informacion veraz y mantenerla actualizada.</li>
+              <li>Debes entregar información veraz y mantenerla actualizada.</li>
               <li>Eres responsable de la confidencialidad de tus credenciales.</li>
               <li>No debes compartir tu cuenta con terceros.</li>
               <li>Podemos suspender cuentas ante uso indebido o fraude.</li>
@@ -71,28 +71,28 @@ export default function TermsOfServicePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">5. Reglas para tutores y estudiantes</h2>
             <ul className="list-disc pl-6 text-foreground/90 space-y-1">
-              <li>Las solicitudes deben representar intencion real de contratar una clase.</li>
-              <li>Los tutores deben publicar informacion clara y no enganosa.</li>
-              <li>El contacto debe usarse solo para fines academicos vinculados a clases.</li>
-              <li>No se permite suplantacion, spam o acoso.</li>
+              <li>Las solicitudes deben representar intención real de contratar una clase.</li>
+              <li>Los tutores deben publicar información clara y no engañosa.</li>
+              <li>El contacto debe usarse solo para fines académicos vinculados a clases.</li>
+              <li>No se permite suplantación, spam o acoso.</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">6. Resenas y reputacion</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">6. Reseñas y reputación</h2>
             <p className="text-foreground/90 mb-4">
-              El sistema de reputacion busca reflejar experiencias reales.
+              El sistema de reputación busca reflejar experiencias reales.
             </p>
             <ul className="list-disc pl-6 text-foreground/90 space-y-1">
-              <li>Solo se pueden dejar resenas cuando una solicitud fue marcada como completada.</li>
-              <li>Las resenas deben ser honestas, pertinentes y respetuosas.</li>
+              <li>Solo se pueden dejar reseñas cuando una solicitud fue marcada como completada.</li>
+              <li>Las reseñas deben ser honestas, pertinentes y respetuosas.</li>
               <li>Podemos moderar o remover contenido que infrinja estas reglas.</li>
             </ul>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">7. Contenidos prohibidos</h2>
-            <p className="text-foreground/90 mb-4">No esta permitido publicar contenido que:</p>
+            <p className="text-foreground/90 mb-4">No está permitido publicar contenido que:</p>
             <ul className="list-disc pl-6 text-foreground/90 space-y-1">
               <li>Sea ilegal, difamatorio, discriminatorio o amenazante.</li>
               <li>Vulnere derechos de terceros o propiedad intelectual.</li>
@@ -111,8 +111,8 @@ export default function TermsOfServicePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">9. Responsabilidad</h2>
             <p className="text-foreground/90">
-              u-clases actua como plataforma de intermediacion y no garantiza resultados academicos,
-              acuerdos economicos ni desempeno de tutores o estudiantes fuera de la aplicacion.
+              u-clases actúa como plataforma de intermediación y no garantiza resultados académicos,
+              acuerdos económicos ni desempeño de tutores o estudiantes fuera de la aplicación.
               Cada usuario es responsable de sus decisiones y acuerdos.
             </p>
           </section>
@@ -120,25 +120,25 @@ export default function TermsOfServicePage() {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">10. Propiedad intelectual</h2>
             <p className="text-foreground/90">
-              El software, marca, interfaces y contenidos propios de la plataforma estan protegidos por
-              normativa aplicable. No esta permitido copiar, distribuir o explotar comercialmente el
-              contenido sin autorizacion.
+              El software, marca, interfaces y contenidos propios de la plataforma están protegidos por
+              normativa aplicable. No está permitido copiar, distribuir o explotar comercialmente el
+              contenido sin autorización.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">11. Suspension y termino de cuenta</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">11. Suspensión y término de cuenta</h2>
             <p className="text-foreground/90">
-              Podemos suspender o cerrar cuentas ante incumplimientos graves de estos terminos, intentos de
+              Podemos suspender o cerrar cuentas ante incumplimientos graves de estos términos, intentos de
               fraude o riesgos de seguridad para la comunidad.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">12. Cambios en los terminos</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">12. Cambios en los términos</h2>
             <p className="text-foreground/90">
-              Podemos modificar estos terminos para reflejar cambios legales o funcionales del producto.
-              Publicaremos la version actualizada con su fecha de vigencia en esta pagina.
+              Podemos modificar estos términos para reflejar cambios legales o funcionales del producto.
+              Publicaremos la versión actualizada con su fecha de vigencia en esta página.
             </p>
           </section>
 

@@ -42,7 +42,7 @@ const updateUserProfileSchema = z
     email: z.string().email().optional(),
   })
   .refine((data) => data.isGraduated || data.academicYear !== null, {
-    message: 'Debes indicar anio academico si no estas titulado',
+    message: 'Debes indicar año académico si no estás titulado',
     path: ['academicYear'],
   });
 
@@ -60,7 +60,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.errors[0]?.message || 'Payload invalido' },
+        { error: parsed.error.errors[0]?.message || 'Payload inválido' },
         { status: 400 }
       );
     }
@@ -138,7 +138,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.errors[0]?.message || 'Confirmacion invalida' },
+        { error: parsed.error.errors[0]?.message || 'Confirmación inválida' },
         { status: 400 }
       );
     }

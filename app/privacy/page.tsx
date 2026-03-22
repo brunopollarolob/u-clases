@@ -82,7 +82,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">6. Comparticion de datos</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">6. Compartición de datos</h2>
             <p className="text-foreground/90 mb-4">No vendemos datos personales. Solo compartimos datos cuando:</p>
             <ul className="list-disc pl-6 text-foreground/90 space-y-1">
               <li>Es necesario para operar el servicio con proveedores técnicos (por ejemplo, hosting o autenticación).</li>
@@ -132,7 +132,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">11. Cambios en esta politica</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">11. Cambios en esta política</h2>
             <p className="text-foreground/90">
               Podemos actualizar esta política para reflejar cambios legales o de producto.
               Publicaremos la nueva versión en esta página con su fecha de actualización.

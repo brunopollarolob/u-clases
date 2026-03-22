@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const parsed = createClassRequestSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ error: parsed.error.errors[0]?.message || 'Payload invalido' }, { status: 400 });
+      return NextResponse.json({ error: parsed.error.errors[0]?.message || 'Payload inválido' }, { status: 400 });
     }
 
     const supabase = await createServiceClient();

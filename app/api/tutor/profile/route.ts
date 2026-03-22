@@ -85,7 +85,7 @@ export async function PUT(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.errors[0]?.message || 'Payload invalido' },
+        { error: parsed.error.errors[0]?.message || 'Payload inválido' },
         { status: 400 }
       );
     }
@@ -112,7 +112,7 @@ export async function PUT(request: NextRequest) {
     }
 
     if (!validCourses || validCourses.length !== payload.courseIds.length) {
-      return NextResponse.json({ error: 'Uno o mas ramos son invalidos' }, { status: 400 });
+      return NextResponse.json({ error: 'Uno o más ramos son inválidos' }, { status: 400 });
     }
 
     const { error: updateUserError } = await supabase
@@ -201,7 +201,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: parsed.error.errors[0]?.message || 'Payload invalido' },
+        { error: parsed.error.errors[0]?.message || 'Payload inválido' },
         { status: 400 }
       );
     }

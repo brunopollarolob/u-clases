@@ -311,7 +311,7 @@ export function AuthProvider({
         if (unsupportedProvider) {
           return {
             success: false,
-            error: 'Google aun no esta habilitado en autenticacion. Activalo en Supabase > Authentication > Providers > Google.',
+            error: 'Google aún no está habilitado en autenticación. Actívalo en Supabase > Authentication > Providers > Google.',
           };
         }
 

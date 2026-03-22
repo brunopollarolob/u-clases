@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const parsed = createReviewSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ error: parsed.error.errors[0]?.message || 'Payload invalido' }, { status: 400 });
+      return NextResponse.json({ error: parsed.error.errors[0]?.message || 'Payload inválido' }, { status: 400 });
     }
 
     const payload = parsed.data;
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     if (!completedRequest) {
       return NextResponse.json(
-        { error: 'Solo puedes reseñar despues de que el profesor marque la clase como completada' },
+        { error: 'Solo puedes reseñar después de que el profesor marque la clase como completada' },
         { status: 403 }
       );
     }

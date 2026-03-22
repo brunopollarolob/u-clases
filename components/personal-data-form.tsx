@@ -83,7 +83,7 @@ export function PersonalDataForm({
     }
 
     const confirmed = window.confirm(
-      'Esta accion eliminara tu cuenta y datos asociados de forma permanente. Deseas continuar?'
+      'Esta acción eliminará tu cuenta y datos asociados de forma permanente. ¿Deseas continuar?'
     );
 
     if (!confirmed) {

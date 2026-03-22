@@ -63,7 +63,7 @@ export default async function ReviewsPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="text-sm text-muted-foreground">
-                Este panel esta disponible para profesores.
+                Este panel está disponible para profesores.
               </p>
               <Button asChild variant="outline">
                 <Link href="/app">Volver al inicio</Link>

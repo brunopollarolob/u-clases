@@ -21,7 +21,7 @@ export default async function ProfilePage({
         <div className="mb-6 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-background px-5 py-6">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Configuracion de cuenta
+            Configuración de cuenta
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -30,7 +30,7 @@ export default async function ProfilePage({
                 Datos personales
               </h1>
               <p className="mt-2 text-muted-foreground">
-                Actualiza tu informacion de contacto y perfil en cualquier momento.
+                Actualiza tu información de contacto y perfil en cualquier momento.
               </p>
             </div>
             <Button asChild variant="outline">
@@ -48,7 +48,7 @@ export default async function ProfilePage({
 
         {showCompletionNotice ? (
           <div className="mb-4 rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-sm text-primary">
-            Completa telefono, especialidad y datos academicos para terminar tu registro.
+            Completa teléfono, especialidad y datos académicos para terminar tu registro.
           </div>
         ) : null}
 

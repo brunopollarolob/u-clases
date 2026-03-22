@@ -36,14 +36,14 @@ export async function PATCH(
     const requestId = Number(id);
 
     if (!Number.isFinite(requestId) || requestId <= 0) {
-      return NextResponse.json({ error: 'ID invalido' }, { status: 400 });
+      return NextResponse.json({ error: 'ID inválido' }, { status: 400 });
     }
 
     const body = await request.json();
     const parsed = updateClassRequestSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ error: parsed.error.errors[0]?.message || 'Payload invalido' }, { status: 400 });
+      return NextResponse.json({ error: parsed.error.errors[0]?.message || 'Payload inválido' }, { status: 400 });
     }
 
     const payload = parsed.data;

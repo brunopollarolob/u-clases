@@ -101,7 +101,7 @@ export default async function TutorDetailPage({ params }: TutorDetailPageProps) 
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
           <Card>
             <CardContent className="space-y-4 py-8 text-center">
-              <p className="text-foreground">Este perfil ya no esta disponible.</p>
+              <p className="text-foreground">Este perfil ya no está disponible.</p>
               <Button asChild variant="outline">
                 <Link href="/app/classes">Volver a Buscar clases</Link>
               </Button>

@@ -31,7 +31,7 @@ export default async function FavoritesPage() {
               <CardTitle>Profesores guardados</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-muted-foreground">Este panel esta disponible para alumnos.</p>
+              <p className="text-sm text-muted-foreground">Este panel está disponible para alumnos.</p>
               <Button asChild variant="outline">
                 <Link href="/app">Volver al inicio</Link>
               </Button>
@@ -64,13 +64,13 @@ export default async function FavoritesPage() {
               Panel de favoritos
             </div>
             <h1 className="text-3xl font-bold text-foreground">Profesores guardados</h1>
-            <p className="mt-1 text-muted-foreground">Guarda perfiles y vuelve rapido cuando los necesites.</p>
+            <p className="mt-1 text-muted-foreground">Guarda perfiles y vuelve rápido cuando los necesites.</p>
           </div>
 
           <Card>
             <CardContent className="py-10 text-center">
               <p className="text-foreground">Aún no has guardado profesores.</p>
-              <p className="mt-1 text-sm text-muted-foreground">Explora la seccion de clases y marca perfiles con el corazon.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Explora la sección de clases y marca perfiles con el corazón.</p>
               <Button asChild className="mt-4 gradient-bg">
                 <Link href="/app/classes">Ir a buscar clases</Link>
               </Button>
@@ -148,10 +148,10 @@ export default async function FavoritesPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Profesores guardados</h1>
-              <p className="mt-1 text-muted-foreground">Perfiles que marcaste para revisar o contactar despues.</p>
+              <p className="mt-1 text-muted-foreground">Perfiles que marcaste para revisar o contactar después.</p>
             </div>
             <Button asChild variant="outline">
-              <Link href="/app/classes">Buscar mas profesores</Link>
+              <Link href="/app/classes">Buscar más profesores</Link>
             </Button>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default async function FavoritesPage() {
                             ))}
                             {courses.length > 3 ? (
                               <span className="inline-flex rounded-full border border-border/70 bg-muted/20 px-2 py-0.5 text-xs text-muted-foreground">
-                                +{courses.length - 3} mas
+                                +{courses.length - 3} más
                               </span>
                             ) : null}
                           </div>
