@@ -28,6 +28,14 @@ function normalizeRecipients(to: Recipient): string[] {
   return Array.isArray(to) ? to : [to];
 }
 
+function normalizeOptionalEmail(value: string | undefined | null): string {
+  if (!value) return '';
+  const trimmed = value.trim();
+  // Common dashboard input mistakes: "" or '' should be treated as empty.
+  const unquoted = trimmed.replace(/^['"]|['"]$/g, '').trim();
+  return unquoted;
+}
+
 interface NotificationEventRow {
   event_key: string;
   status: 'pending' | 'sent' | 'failed' | 'skipped';
@@ -99,8 +107,10 @@ async function upsertNotificationEvent(params: {
  */
 export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult> {
   const { enabled, provider, from, replyTo, redirectTo, resendApiKey } = config.notifications.email;
+  const normalizedReplyTo = normalizeOptionalEmail(replyTo);
+  const normalizedRedirectTo = normalizeOptionalEmail(redirectTo);
   const originalRecipients = normalizeRecipients(input.to);
-  const effectiveRecipients = redirectTo ? [redirectTo] : originalRecipients;
+  const effectiveRecipients = normalizedRedirectTo ? [normalizedRedirectTo] : originalRecipients;
   const eventKey = input.idempotencyKey || `email:${Date.now()}:${crypto.randomUUID()}`;
   const eventType = input.eventType || 'email.generic';
   const existingEvent = await getNotificationEventByKey(eventKey);
@@ -222,12 +232,12 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
   }
 
   try {
-    const redirectNotice = redirectTo
+    const redirectNotice = normalizedRedirectTo
       ? `<p style="font-size:12px;color:#6b7280;margin:0 0 10px;">[test mode] Intended recipients: ${originalRecipients.join(', ')}</p>`
       : '';
 
     const htmlWithRedirectNotice = redirectNotice ? `${redirectNotice}${input.html}` : input.html;
-    const textWithRedirectNotice = redirectTo
+    const textWithRedirectNotice = normalizedRedirectTo
       ? `[test mode] Intended recipients: ${originalRecipients.join(', ')}\n\n${input.text || ''}`.trim()
       : input.text;
 
@@ -238,7 +248,7 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
       subject: input.subject,
       html: htmlWithRedirectNotice,
       text: textWithRedirectNotice,
-      ...(replyTo ? { replyTo } : {}),
+      ...(normalizedReplyTo ? { replyTo: normalizedReplyTo } : {}),
     });
 
     if (error) {
